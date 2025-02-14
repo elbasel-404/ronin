@@ -1,1 +1,11 @@
- [ { "description": "Boil water", "isBasicTask": true, "name": "Boil water" }, { "description": "Steep tea bag in hot water", "isBasicTask": true, "name": "Steep tea bag in hot water" } ]
+[{
+  "description": "Boil water",
+  "isBasicTask": true,
+  "name": "Boil Water",
+  "pseudocode": "Put water in kettle, turn on kettle, wait for water to boil"
+},{
+  "description": "Steep tea",
+  "isBasicTask": true,
+  "name": "Steep Tea",
+  "pseudocode": "Put tea bag in cup, pour hot water in cup, wait for tea to steep"
+}]

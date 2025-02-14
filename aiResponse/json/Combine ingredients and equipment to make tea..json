@@ -1,0 +1,18 @@
+[{
+  "description": "Combine the ingredients and equipment needed to make tea.",
+  "isBasicTask": false,
+  "name": "Make tea",
+  "pseudocode": null
+},
+{
+  "description": "Combine ingredients for tea.",
+  "isBasicTask": true,
+  "name": "Combine ingredients",
+  "pseudocode": "Get tea leaves or tea bags. Get water. Get sugar or honey (optional). Get milk or lemon (optional)."
+},
+{
+  "description": "Combine equipment for tea.",
+  "isBasicTask": true,
+  "name": "Combine equipment",
+  "pseudocode": "Get a kettle or pot. Get a mug or cup. Get a spoon."
+}]

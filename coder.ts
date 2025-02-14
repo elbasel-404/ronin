@@ -9,6 +9,7 @@ const zodSchema = z.object({
   isBasicTask: z.boolean(),
   description: z.string(),
   name: z.string(),
+  pseudocode: z.string(),
 });
 
 // Define the expected JSON schema for the API response.
@@ -34,8 +35,13 @@ const schema = {
           "Whether the task is simple enough to not be divided further. If so, this should be true.",
         nullable: false,
       },
+      pseudocode: {
+        type: SchemaType.STRING,
+        description: "Pseudo code for the task",
+        nullable: false,
+      },
     },
-    required: ["name", "description", "isBasicTask"],
+    required: ["name", "description", "isBasicTask", "pseudocode"],
   },
 };
 
@@ -85,8 +91,8 @@ const buildSubTree = async (
 
   // Call splitTask to get the subtasks.
   const responseString = await splitTask(task.description);
-  let subTaskResults: TaskResult[] = JSON.parse(responseString).map((item: any) =>
-    zodSchema.parse(item)
+  let subTaskResults: TaskResult[] = JSON.parse(responseString).map(
+    (item: any) => zodSchema.parse(item)
   );
 
   // Limit to at most 2 subtasks.
@@ -121,8 +127,8 @@ export const buildTaskTree = async (initialTask: string): Promise<TaskNode> => {
 
   // Split the root task into subtasks.
   const responseString = await splitTask(initialTask);
-  let subTaskResults: TaskResult[] = JSON.parse(responseString).map((item: any) =>
-    zodSchema.parse(item)
+  let subTaskResults: TaskResult[] = JSON.parse(responseString).map(
+    (item: any) => zodSchema.parse(item)
   );
 
   // Limit to at most 2 subtasks.
@@ -138,12 +144,8 @@ export const buildTaskTree = async (initialTask: string): Promise<TaskNode> => {
   return { task: rootTask, subTasks: children };
 };
 
-// Usage example:
+// Ujge example:
 const MAIN_TASK = "make a cup of tea";
-buildTaskTree(MAIN_TASK)
-  .then((tree) => {
-    console.log("Task Tree:", JSON.stringify(tree, null, 2));
-  })
-  .catch((error) => {
-    console.error("Error building task tree:", error);
-  });
+
+const taskTree = await buildTaskTree(MAIN_TASK);
+console.log(taskTree);
