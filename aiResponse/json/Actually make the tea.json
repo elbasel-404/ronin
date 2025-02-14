@@ -1,0 +1,12 @@
+[{
+  "description": "Heat the water and steep the tea bag.",
+  "isBasicTask": false,
+  "name": "Make the tea",
+  "pseudocode": "boil water; steep tea bag in hot water"
+},
+{
+  "description": "Pour the hot water and tea into the cup.",
+  "isBasicTask": true,
+  "name": "Pour the tea",
+  "pseudocode": "pour hot water and tea into cup"
+}]

@@ -1,0 +1,11 @@
+[{
+  "description": "Identify and collect all the tools required for tea preparation.",
+  "isBasicTask": false,
+  "name": "Identify and collect tools",
+  "pseudocode": "Identify the tools required. Collect the identified tools."
+}, {
+  "description": "List all the necessary tools for tea preparation.",
+  "isBasicTask": true,
+  "name": "List tools",
+  "pseudocode": "List tools like kettle, tea cup, tea bag/leaves, etc."
+}]

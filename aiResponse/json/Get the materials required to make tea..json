@@ -1,0 +1,6 @@
+[{
+  "description": "Identify the materials needed to make tea.",
+  "isBasicTask": true,
+  "name": "Get tea making materials",
+  "pseudocode": "List the materials required for tea preparation, including water, tea leaves/bags, a kettle or pot, and optionally, milk, sugar, and a cup."
+}]

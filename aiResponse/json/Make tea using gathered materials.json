@@ -1,0 +1,11 @@
+[{
+  "description": "Gather materials needed for making tea.",
+  "isBasicTask": false,
+  "name": "Gather Tea Materials",
+  "pseudocode": "1. Identify required materials (water, tea leaves/bag, cup, kettle/pot, heat source).\n2. Collect each material."
+},{
+  "description": "Make tea using the gathered materials.",
+  "isBasicTask": true,
+  "name": "Make Tea",
+  "pseudocode": "1. Boil water using kettle/pot and heat source.\n2. Place tea leaves/bag into the cup.\n3. Pour hot water into the cup.\n4. Steep for appropriate time.\n5. Remove tea leaves/bag (if necessary).\n6. Enjoy the tea."
+}]

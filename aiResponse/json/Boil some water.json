@@ -1,0 +1,12 @@
+[{
+  "description": "Fill a container with water and heat it until it boils.",
+  "isBasicTask": false,
+  "name": "Boil some water - Task 1",
+  "pseudocode": "1. Fill a container with water.\n2. Place the container on a heat source.\n3. Turn on the heat source.\n4. Wait until the water boils."
+},
+{
+  "description": "Get water ready for boiling",
+  "isBasicTask": true,
+  "name": "Boil some water - Task 2",
+  "pseudocode": "1. Get a container (e.g., pot, kettle).\n2. Get water from a source (e.g., tap).\n3. Pour water into the container."
+}]

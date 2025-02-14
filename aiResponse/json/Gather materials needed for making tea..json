@@ -1,0 +1,11 @@
+ [{
+  "description": "Gather the materials needed for making tea.",
+  "isBasicTask": false,
+  "name": "Gather Materials",
+  "pseudocode": "Identify all necessary materials. For each material, determine if it's available. If not, list the unavailable materials. Create a list of all available materials."
+}, {
+  "description": "Brewing the tea.",
+  "isBasicTask": true,
+  "name": "Brewing Tea",
+  "pseudocode": "Heat water. Add tea leaves/bag. Steep for the appropriate time. Strain leaves or remove the tea bag. Serve and enjoy."
+}]

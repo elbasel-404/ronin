@@ -1,0 +1,11 @@
+ [{
+  "description": "Boil water for tea preparation",
+  "isBasicTask": true,
+  "name": "Boil water",
+  "pseudocode": "1. Fill kettle with water. 2. Turn on the kettle and wait until the water boils."
+}, {
+  "description": "Steep tea bag in hot water",
+  "isBasicTask": true,
+  "name": "Steep tea bag",
+  "pseudocode": "1. Place tea bag in a mug. 2. Pour hot water over the tea bag. 3. Let the tea steep for the recommended time. 4. Remove the tea bag."
+}]

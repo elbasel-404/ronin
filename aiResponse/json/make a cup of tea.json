@@ -1,11 +1,1 @@
-[{
-  "description": "Boil water",
-  "isBasicTask": true,
-  "name": "Boil Water",
-  "pseudocode": "Put water in kettle, turn on kettle, wait for water to boil"
-},{
-  "description": "Steep tea",
-  "isBasicTask": true,
-  "name": "Steep Tea",
-  "pseudocode": "Put tea bag in cup, pour hot water in cup, wait for tea to steep"
-}]
+ [ { "description": "Get the necessary ingredients and equipment to make tea.", "isBasicTask": false, "name": "Prepare for making tea", "pseudocode": "1. Gather tea bag or loose tea.\n2. Get a mug.\n3. Get water and a kettle." }, { "description": "Make the tea.", "isBasicTask": false, "name": "Make tea", "pseudocode": "1. Boil water in the kettle.\n2. Put tea bag or loose tea in the mug.\n3. Pour hot water into the mug.\n4. Steep for the desired amount of time.\n5. Remove tea bag or strain loose tea.\n6. Add milk and sugar (optional)." } ]

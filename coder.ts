@@ -3,6 +3,7 @@ import { getAiResponse } from "./getAiResponse";
 import { getSubTasksPrompt } from "./prompts/getSplitTaskPrompt";
 import { sleep } from "./sleep";
 import { z } from "zod";
+import { write } from "bun";
 
 // Define a zod schema for each task.
 const zodSchema = z.object({
@@ -148,4 +149,8 @@ export const buildTaskTree = async (initialTask: string): Promise<TaskNode> => {
 const MAIN_TASK = "make a cup of tea";
 
 const taskTree = await buildTaskTree(MAIN_TASK);
-console.log(taskTree);
+console.dir({ taskTree });
+const taskTreeFilePath =
+  "./taskTrees/" + Date.now() + MAIN_TASK.replaceAll(" ", "_") + ".json";
+write(taskTreeFilePath, JSON.stringify(taskTree));
+console.log(taskTreeFilePath);

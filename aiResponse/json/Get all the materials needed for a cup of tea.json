@@ -1,0 +1,12 @@
+[{
+  "description": "Get the materials required to make tea.",
+  "isBasicTask": false,
+  "name": "Get materials for tea",
+  "pseudocode": "Divide the task into identifying and gathering the materials needed for a cup of tea."
+},
+{
+  "description": "Get all the materials needed for a cup of tea.",
+  "isBasicTask": true,
+  "name": "Gather materials",
+  "pseudocode": "Identify and list the materials required: water, tea leaves or tea bag, a cup, and a kettle."
+}]
