@@ -1,0 +1,13 @@
+{
+  "name": "@ronin/actions",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@ronin/config": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@ronin/hooks",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/config": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}

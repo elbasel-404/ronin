@@ -1,7 +1,5 @@
-import { GoogleGenerativeAI, type ResponseSchema } from "@google/generative-ai";
 import { file, write } from "bun";
-// import { aiModel, systemInstruction } from "./config";
-import { aiModelNameString } from "../../config";
+import { GoogleGenerativeAI, ResponseSchema } from "@google/generative-ai";
 
 const apiKey = process.env.GEMINI_API_KEY as string;
 const googleGenAi = new GoogleGenerativeAI(apiKey);
