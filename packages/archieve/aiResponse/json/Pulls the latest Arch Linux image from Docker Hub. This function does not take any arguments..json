@@ -1,0 +1,8 @@
+[{
+  "arguments": "null",
+  "description": "Pulls the latest Arch Linux image from Docker Hub.",
+  "functionName": "pullLatestArchLinuxImage",
+  "isPrimeFunction": true,
+  "pseudocode": "1. Use the Docker CLI to pull the 'archlinux' image.\n2. Output success or failure.",
+  "returns": "string"
+}]

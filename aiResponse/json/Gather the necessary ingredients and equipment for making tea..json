@@ -1,1 +1,0 @@
- [ { "description": "Gather the necessary ingredients for making tea.", "isBasicTask": true, "name": "Gather Ingredients", "pseudocode": null }, { "description": "Gather the necessary equipment for making tea.", "isBasicTask": true, "name": "Gather Equipment", "pseudocode": null } ]

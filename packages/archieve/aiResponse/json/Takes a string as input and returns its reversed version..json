@@ -1,0 +1,18 @@
+[
+  {
+    "arguments": "string",
+    "description": "Reverses a given string. This is the first part of the string reversal process.",
+    "functionName": "reverseStringFirstPart",
+    "isPrimeFunction": false,
+    "pseudocode": "1. Initialize an empty string called 'reversed_string'.\n2. Iterate through the input string from the end to the beginning.\n3. In each iteration, append the current character to 'reversed_string'.\n4. Return the 'reversed_string'.",
+    "returns": "string"
+  },
+  {
+    "arguments": "string",
+    "description": "Reverses a given string. This is the second part of the string reversal process.",
+    "functionName": "reverseStringSecondPart",
+    "isPrimeFunction": false,
+    "pseudocode": "1. Call the reverseStringFirstPart function with the input string.\n2. Return the result of the function call.",
+    "returns": "string"
+  }
+]

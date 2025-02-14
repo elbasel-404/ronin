@@ -1,0 +1,8 @@
+[{
+  "arguments": "string",
+  "description": "Run the arch linux docker image with shell functions",
+  "functionName": "runArchLinuxDocker",
+  "pseudocode": "func runArchLinuxDocker(commands: string) => string\n{\n  docker run --rm -it archlinux bash -c commands\n}",
+  "returns": "string",
+  "shouldBeSplit": false
+}]

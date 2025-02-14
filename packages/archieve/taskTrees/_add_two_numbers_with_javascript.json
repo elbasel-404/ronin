@@ -1,0 +1,131 @@
+{
+    "task": {
+        "functionName": "add two numbers with javascript",
+        "arguments": "{string",
+        "returns": "none",
+        "description": "add two numbers with javascript",
+        "shouldBeSplit": true,
+        "pseudocode": "(input) => reverseOfInput"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "addNumbers",
+                "description": "Adds two numbers and returns the sum.",
+                "shouldBeSplit": false,
+                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                "arguments": "a: number, b: number",
+                "returns": "number"
+            },
+            "subTasks": [
+                {
+                    "task": {
+                        "functionName": "addNumbers",
+                        "description": "Adds two numbers and returns the sum.",
+                        "shouldBeSplit": false,
+                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                        "arguments": "number, number",
+                        "returns": "number"
+                    },
+                    "subTasks": [
+                        {
+                            "task": {
+                                "functionName": "addNumbers",
+                                "description": "Adds two numbers and returns the sum.",
+                                "shouldBeSplit": false,
+                                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                "arguments": "number, number",
+                                "returns": "number"
+                            },
+                            "subTasks": [
+                                {
+                                    "task": {
+                                        "functionName": "addNumbers",
+                                        "description": "Adds two numbers and returns the sum.",
+                                        "shouldBeSplit": false,
+                                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                        "arguments": "number, number",
+                                        "returns": "number"
+                                    },
+                                    "subTasks": [
+                                        {
+                                            "task": {
+                                                "functionName": "addNumbers",
+                                                "description": "Adds two numbers and returns the sum.",
+                                                "shouldBeSplit": false,
+                                                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                "arguments": "number, number",
+                                                "returns": "number"
+                                            },
+                                            "subTasks": [
+                                                {
+                                                    "task": {
+                                                        "functionName": "addNumbers",
+                                                        "description": "Adds two numbers and returns the sum.",
+                                                        "shouldBeSplit": false,
+                                                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                        "arguments": "a: number, b: number",
+                                                        "returns": "number"
+                                                    },
+                                                    "subTasks": [
+                                                        {
+                                                            "task": {
+                                                                "functionName": "addNumbers",
+                                                                "description": "Adds two numbers and returns the sum.",
+                                                                "shouldBeSplit": false,
+                                                                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                                "arguments": "a: number, b: number",
+                                                                "returns": "number"
+                                                            },
+                                                            "subTasks": [
+                                                                {
+                                                                    "task": {
+                                                                        "functionName": "addNumbers",
+                                                                        "description": "Adds two numbers and returns the sum.",
+                                                                        "shouldBeSplit": false,
+                                                                        "pseudocode": "function addNumbers(num1, num2):\n  return num1 + num2",
+                                                                        "arguments": "num1: number, num2: number",
+                                                                        "returns": "number"
+                                                                    },
+                                                                    "subTasks": [
+                                                                        {
+                                                                            "task": {
+                                                                                "functionName": "add",
+                                                                                "description": "Adds two numbers and returns the sum.",
+                                                                                "shouldBeSplit": false,
+                                                                                "pseudocode": "function add(a, b) {\n  return a + b;\n}",
+                                                                                "arguments": "number a, number b",
+                                                                                "returns": "number"
+                                                                            },
+                                                                            "subTasks": [
+                                                                                {
+                                                                                    "task": {
+                                                                                        "functionName": "addNumbers",
+                                                                                        "description": "Adds two numbers and returns the sum.",
+                                                                                        "shouldBeSplit": false,
+                                                                                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                                                        "arguments": "number, number",
+                                                                                        "returns": "number"
+                                                                                    },
+                                                                                    "subTasks": []
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

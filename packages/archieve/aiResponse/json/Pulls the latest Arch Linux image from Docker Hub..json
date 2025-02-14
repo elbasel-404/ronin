@@ -1,0 +1,15 @@
+[{
+  "arguments": "",
+  "description": "Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments.",
+  "functionName": "pullArchLinuxImage",
+  "isPrimeFunction": false,
+  "pseudocode": "function pullArchLinuxImage() {\n  // 1. Define the image name\n  // 2. Execute docker pull command with the image name\n}\n\nfunction getImageName() {\n  // 1. Returns the image name \"archlinux:latest\"\n}\n",
+  "returns": "string"
+},{
+  "arguments": "",
+  "description": "Retrieves the Arch Linux image name.",
+  "functionName": "getImageName",
+  "isPrimeFunction": true,
+  "pseudocode": "function getImageName() {\n  // Returns the image name \"archlinux:latest\"\n}\n",
+  "returns": "string"
+}]

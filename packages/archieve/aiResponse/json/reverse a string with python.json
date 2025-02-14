@@ -1,0 +1,16 @@
+[{
+  "arguments": "string",
+  "description": "Reverses a string using Python's string slicing.",
+  "functionName": "reverse_string",
+  "isPrimeFunction": true,
+  "pseudocode": "return the string sliced from the end to the beginning with a step of -1",
+  "returns": "string"
+},
+{
+  "arguments": "string",
+  "description": "Takes a string as input and returns its reversed version.",
+  "functionName": "reverse_string_with_split_and_join",
+  "isPrimeFunction": false,
+  "pseudocode": "Split the string into a list of characters. Reverse the list of characters. Join the list of characters back into a string. Return the reversed string",
+  "returns": "string"
+}]

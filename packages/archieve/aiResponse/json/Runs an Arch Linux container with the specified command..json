@@ -1,0 +1,15 @@
+[{
+  "arguments": "command: string",
+  "description": "Runs an Arch Linux container with the specified command. This is the first part of the function.",
+  "functionName": "runArchLinuxContainer_setup",
+  "isPrimeFunction": false,
+  "pseudocode": "1. Create a temporary directory.\n2. Pull the Arch Linux Docker image.\n3. Start a Docker container using the Arch Linux image and mount the temporary directory.\n4. Return the container ID.",
+  "returns": "containerId: string"
+}, {
+  "arguments": "containerId: string, command: string",
+  "description": "Runs a command inside an existing Arch Linux container. This is the second part of the function.",
+  "functionName": "runArchLinuxContainer_execute",
+  "isPrimeFunction": true,
+  "pseudocode": "1. Execute the specified command inside the Docker container using docker exec.\n2. Return the output and exit code.",
+  "returns": "output: string, exitCode: number"
+}]

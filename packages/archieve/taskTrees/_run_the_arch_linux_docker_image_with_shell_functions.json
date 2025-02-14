@@ -1,0 +1,23 @@
+{
+    "task": {
+        "functionName": "main",
+        "arguments": "void",
+        "returns": "void",
+        "description": "main task",
+        "shouldBeSplit": true,
+        "pseudocode": "main()"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "runArchLinuxDocker",
+                "description": "Run the arch linux docker image with shell functions",
+                "shouldBeSplit": false,
+                "pseudocode": "func runArchLinuxDocker(commands: string) => string\n{\n  docker run --rm -it archlinux bash -c commands\n}",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": []
+        }
+    ]
+}

@@ -1,0 +1,184 @@
+{
+    "task": {
+        "functionName": "running arch linux using the docker cli",
+        "arguments": "{string",
+        "returns": "none",
+        "description": "running arch linux using the docker cli",
+        "isPrimeFunction": false,
+        "pseudocode": "(input) => reverseOfInput"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "pullArchLinuxImage",
+                "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                "isPrimeFunction": false,
+                "pseudocode": "docker pull archlinux",
+                "arguments": "none",
+                "returns": "string"
+            },
+            "subTasks": [
+                {
+                    "task": {
+                        "functionName": "pullArchLinuxImage",
+                        "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                        "isPrimeFunction": false,
+                        "pseudocode": "function pullArchLinuxImage() {\n  // 1. Define a function to pull the image using a Docker command, returning a promise or similar based on the underlying command execution.\n  // 2. Use a promise-based approach (async/await or .then()) to handle the command execution.\n  // 3. Catch any errors during the pull and handle them.\n  // 4. Return a message indicating success or failure.\n  // Example (conceptual):\n  // async function pullArchLinuxImage() {\n  //   try {\n  //     await executeDockerCommand('docker pull archlinux');\n  //     return 'Arch Linux image pulled successfully.';\n  //   } catch (error) {\n  //     return 'Error pulling Arch Linux image: ' + error.message;\n  //   }\n  // }\n}",
+                        "arguments": "",
+                        "returns": "string"
+                    },
+                    "subTasks": [
+                        {
+                            "task": {
+                                "functionName": "pull_arch_linux_image",
+                                "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                                "isPrimeFunction": false,
+                                "pseudocode": "function pull_arch_linux_image():\n    // Function 1: Check if the image exists locally\n    image_exists = check_local_image()\n    // Function 2: Pull the image if it doesn't exist\n    if not image_exists:\n        pull_docker_image()\n    return \"Arch Linux image pulled successfully\"",
+                                "arguments": "",
+                                "returns": "string"
+                            },
+                            "subTasks": [
+                                {
+                                    "task": {
+                                        "functionName": "pull_arch_linux_image",
+                                        "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                                        "isPrimeFunction": false,
+                                        "pseudocode": "1. Define a function to pull the latest Arch Linux image.\n2. Call the docker pull command to fetch the image from Docker Hub.\n3. Optionally, provide a success/failure message.",
+                                        "arguments": "",
+                                        "returns": "string"
+                                    },
+                                    "subTasks": [
+                                        {
+                                            "task": {
+                                                "functionName": "pullArchLinuxImage",
+                                                "description": "Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments.",
+                                                "isPrimeFunction": false,
+                                                "pseudocode": "function pullArchLinuxImage() {\n  // 1. Define the image name\n  // 2. Execute docker pull command with the image name\n}\n\nfunction getImageName() {\n  // 1. Returns the image name \"archlinux:latest\"\n}\n",
+                                                "arguments": "",
+                                                "returns": "string"
+                                            },
+                                            "subTasks": [
+                                                {
+                                                    "task": {
+                                                        "functionName": "pullLatestArchImage",
+                                                        "description": "Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments.",
+                                                        "isPrimeFunction": false,
+                                                        "pseudocode": "function pullLatestArchImage():\n  // 1. Execute the docker pull command for the archlinux image.\n  // 2. Handle potential errors (e.g., image not found, network issues).\n  // 3. Return success or failure message.\n  pass",
+                                                        "arguments": "string",
+                                                        "returns": "string"
+                                                    },
+                                                    "subTasks": [
+                                                        {
+                                                            "task": {
+                                                                "functionName": "pullLatestArchLinuxImage",
+                                                                "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                                                                "isPrimeFunction": true,
+                                                                "pseudocode": "1. Use the Docker CLI to pull the 'archlinux' image.\n2. Output success or failure.",
+                                                                "arguments": "null",
+                                                                "returns": "string"
+                                                            },
+                                                            "subTasks": []
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "task": {
+                                                        "functionName": "executeDockerPull",
+                                                        "description": "Executes the docker pull command for the specified image.",
+                                                        "isPrimeFunction": true,
+                                                        "pseudocode": "function executeDockerPull(imageName: string): // input is the image name to pull\n  // 1. Construct the docker pull command string.\n  // 2. Execute the command using a suitable library or method (e.g., subprocess).\n  // 3. Capture the output and error streams.\n  // 4. Analyze the output to determine success or failure.\n  // 5. Return a success/failure message with relevant details.\n  pass",
+                                                        "arguments": "string",
+                                                        "returns": "string"
+                                                    },
+                                                    "subTasks": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "task": {
+                                                "functionName": "getImageName",
+                                                "description": "Retrieves the Arch Linux image name.",
+                                                "isPrimeFunction": true,
+                                                "pseudocode": "function getImageName() {\n  // Returns the image name \"archlinux:latest\"\n}\n",
+                                                "arguments": "",
+                                                "returns": "string"
+                                            },
+                                            "subTasks": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "task": {
+                                        "functionName": "execute_docker_pull",
+                                        "description": "Helper function to execute the docker pull command.",
+                                        "isPrimeFunction": true,
+                                        "pseudocode": "1. Construct the docker pull command: 'docker pull archlinux/archlinux:latest'.\n2. Execute the command using a subprocess or similar method.\n3. Return the result of the command execution.",
+                                        "arguments": "",
+                                        "returns": "string"
+                                    },
+                                    "subTasks": []
+                                }
+                            ]
+                        },
+                        {
+                            "task": {
+                                "functionName": "check_local_image",
+                                "description": "Checks if the Arch Linux image exists locally.",
+                                "isPrimeFunction": true,
+                                "pseudocode": "function check_local_image():\n    // Use docker command to inspect the image\n    if docker image exists:\n        return True\n    else:\n        return False",
+                                "arguments": "",
+                                "returns": "boolean"
+                            },
+                            "subTasks": []
+                        }
+                    ]
+                },
+                {
+                    "task": {
+                        "functionName": "executeDockerCommand",
+                        "description": "Executes a Docker command.",
+                        "isPrimeFunction": true,
+                        "pseudocode": "function executeDockerCommand(command) {\n  // 1. Use a library or function to execute shell commands (e.g., child_process in Node.js).\n  // 2. Pass the provided `command` to the shell execution function.\n  // 3. Return a promise that resolves when the command completes.\n  // 4. If the command fails, reject the promise with an error.\n  // Example (conceptual):\n  // function executeDockerCommand(command) {\n  //   return new Promise((resolve, reject) => {\n  //     const child = exec(command, (error, stdout, stderr) => {\n  //       if (error) {\n  //         reject(error);\n  //         return;\n  //       }\n  //       resolve(stdout || stderr);\n  //     });\n  //   });\n  // }\n}",
+                        "arguments": "string",
+                        "returns": "string"
+                    },
+                    "subTasks": []
+                }
+            ]
+        },
+        {
+            "task": {
+                "functionName": "runArchLinuxContainer",
+                "description": "Runs an Arch Linux container with the specified command.",
+                "isPrimeFunction": false,
+                "pseudocode": "docker run -it archlinux <command>",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": [
+                {
+                    "task": {
+                        "functionName": "runArchLinuxContainer_setup",
+                        "description": "Runs an Arch Linux container with the specified command. This is the first part of the function.",
+                        "isPrimeFunction": false,
+                        "pseudocode": "1. Create a temporary directory.\n2. Pull the Arch Linux Docker image.\n3. Start a Docker container using the Arch Linux image and mount the temporary directory.\n4. Return the container ID.",
+                        "arguments": "command: string",
+                        "returns": "containerId: string"
+                    },
+                    "subTasks": []
+                },
+                {
+                    "task": {
+                        "functionName": "runArchLinuxContainer_execute",
+                        "description": "Runs a command inside an existing Arch Linux container. This is the second part of the function.",
+                        "isPrimeFunction": true,
+                        "pseudocode": "1. Execute the specified command inside the Docker container using docker exec.\n2. Return the output and exit code.",
+                        "arguments": "containerId: string, command: string",
+                        "returns": "output: string, exitCode: number"
+                    },
+                    "subTasks": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,6 +1,0 @@
-[{
-  "description": "Place tea leaves in a container and pour hot water over them.",
-  "isBasicTask": true,
-  "name": "Steep tea",
-  "pseudocode": "Place tea leaves in a container.\nPour hot water over the tea leaves.\nWait for a specified time.\nRemove tea leaves."
-}]

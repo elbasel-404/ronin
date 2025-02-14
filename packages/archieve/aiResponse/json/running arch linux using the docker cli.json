@@ -1,0 +1,15 @@
+ [{
+  "arguments": "none",
+  "description": "Pulls the latest Arch Linux image from Docker Hub.",
+  "functionName": "pullArchLinuxImage",
+  "isPrimeFunction": false,
+  "pseudocode": "docker pull archlinux",
+  "returns": "string"
+}, {
+  "arguments": "string",
+  "description": "Runs an Arch Linux container with the specified command.",
+  "functionName": "runArchLinuxContainer",
+  "isPrimeFunction": false,
+  "pseudocode": "docker run -it archlinux <command>",
+  "returns": "string"
+}]

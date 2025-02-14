@@ -1,0 +1,34 @@
+{
+    "task": {
+        "functionName": "reverse a string with python",
+        "arguments": "{string",
+        "returns": "none",
+        "description": "reverse a string with python",
+        "isPrimeFunction": false,
+        "pseudocode": "(input) => reverseOfInput"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "reverse_string_slice",
+                "description": "Reverses a string using slicing.",
+                "isPrimeFunction": true,
+                "pseudocode": "return the string reversed using slicing",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": []
+        },
+        {
+            "task": {
+                "functionName": "reverse_string_loop",
+                "description": "Reverses a string using a loop.",
+                "isPrimeFunction": true,
+                "pseudocode": "Iterate over the string backwards and build a new string.",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": []
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+[{
+  "arguments": "a: number, b: number",
+  "description": "Adds two numbers and returns the sum.",
+  "functionName": "addNumbers",
+  "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+  "returns": "number",
+  "shouldBeSplit": false
+}]
