@@ -1,0 +1,3319 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+
+Additional Info:
+----------------
+
+================================================================
+Directory Structure
+================================================================
+.repomix/
+  bundles.json
+packages/
+  actions/
+    getAiResponse.ts
+    package.json
+    tsconfig.json
+  archieve/
+    aiResponse/
+      json/
+        add two numbers with javascript.json
+        Adds two numbers and returns the sum..json
+        Adds two numbers..json
+        Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments..json
+        Pulls the latest Arch Linux image from Docker Hub..json
+        reverse a string with python.json
+        Reverses a given string. This is the first part of the string reversal process..json
+        run the arch linux docker image with shell functions.json
+        running arch linux using the docker cli.json
+        Runs an Arch Linux container with the specified command. This is the first part of the function..json
+        Runs an Arch Linux container with the specified command..json
+        Takes a string as input and returns its reversed version..json
+    taskTrees/
+      _add_two_numbers_with_javascript.json
+      _reverse_a_string_with_python.json
+      _run_the_arch_linux_docker_image_with_shell_functions.json
+      _running_arch_linux_using_the_docker_cli.json
+    generateFunctionTree copy.ts
+    package.json
+    tsconfig.json
+  config/
+    index.ts
+    package.json
+    tsconfig.json
+  docs/
+    bun/
+      plugins.md
+      workspaces.md
+    gemini/
+      example.ts
+      models.md
+    ronin/
+      LanguageX.md
+    package.json
+  hooks/
+    package.json
+    tsconfig.json
+    useFormAction.ts
+  prompts/
+    getPlanPrompt.ts
+    getSplitTaskPrompt.ts
+    package.json
+    tsconfig.json
+  scripts/
+    coder.ts
+    package.json
+    tsconfig.json
+  test/
+    server/
+      actions/
+        testExecuteCommand.ts
+        tsconfig.json
+    package.json
+    tsconfig.json
+  utils/
+    package.json
+    sleep.ts
+    tsconfig.json
+.gitignore
+bun.lock
+index.ts
+package.json
+README.md
+tsconfig.json
+
+================================================================
+Files
+================================================================
+
+================
+File: .repomix/bundles.json
+================
+{
+  "bundles": {}
+}
+
+================
+File: packages/actions/getAiResponse.ts
+================
+import { file, write } from "bun";
+import { GoogleGenerativeAI, ResponseSchema } from "@google/generative-ai";
+
+const apiKey = process.env.GEMINI_API_KEY as string;
+const googleGenAi = new GoogleGenerativeAI(apiKey);
+
+type GetAiResponseArgs = {
+  prompt: string;
+  // context?: string;
+  responseMimeType?: "text" | "application/json" | "text/md";
+  responseSchema?: ResponseSchema;
+  task?: string;
+};
+
+export const getAiResponse = async ({
+  task,
+  prompt,
+  // context,
+  responseMimeType,
+  responseSchema,
+}: GetAiResponseArgs) => {
+  // const aiStart = performance.now();
+  // console.log("AI start", aiStart);
+  const genModel = googleGenAi.getGenerativeModel({
+    model: aiModelNameString,
+    // systemInstruction: systemInstruction,
+    generationConfig: {
+      // candidateCount,
+      // frequencyPenalty,
+      candidateCount: 1,
+      // logprobs,
+      // maxOutputTokens,
+      // presencePenalty,
+      // stopSequences,
+      // temperature
+      // topK,
+      // topP,
+      responseMimeType,
+      responseSchema,
+    },
+  });
+  // const { response } = await genModel.generateContent(prompt);
+  const genContent = await genModel.generateContent(prompt);
+
+  const { response } = genContent;
+  const { text } = response;
+
+  const responseText = text();
+  console.log(JSON.parse(responseText));
+  const aiResponseFile = file("aiResponse/json/" + (task ?? prompt) + ".json");
+  await write(aiResponseFile, responseText);
+  // console.log(aiResponseFile.name);
+  // const aiEnd = performance.now();
+  // console.log(`AI took ${(aiEnd - aiStart) / 1000} seconds`);
+  return responseText;
+  // ! ========================================================================
+};
+
+// interface AiResponse {
+//   functionCallResult?: any;
+//   genContent?: any;
+//   functionCalls?: any;
+//   candidates?: Array<{
+//     content: {
+//       parts: Array<{
+//         codeExecutionResult?: any;
+//         executableCode?: any;
+//         fileData?: any;
+//         functionCall?: any;
+//         functionResponse?: any;
+//         inlineData?: any;
+//         text?: string;
+//       }>;
+//       role?: string;
+//     };
+//     index?: number;
+//     avgLogprobs?: any;
+//     citationMetadata?: any;
+//     finishMessage?: any;
+//     finishReason?: any;
+//     groundingMetadata?: any;
+//     logprobsResult?: any;
+//     safetyRatings?: any;
+//   }>;
+//   promptFeedback?: any;
+//   usageMetadata?: any;
+// }
+
+================
+File: packages/actions/package.json
+================
+{
+  "name": "@ronin/actions",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@ronin/config": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}
+
+================
+File: packages/actions/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/archieve/aiResponse/json/add two numbers with javascript.json
+================
+[{
+  "arguments": "a: number, b: number",
+  "description": "Adds two numbers and returns the sum.",
+  "functionName": "addNumbers",
+  "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+  "returns": "number",
+  "shouldBeSplit": false
+}]
+
+================
+File: packages/archieve/aiResponse/json/Adds two numbers and returns the sum..json
+================
+[{"arguments": "number, number", "description": "Adds two numbers and returns the sum.", "functionName": "addNumbers", "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}", "returns": "number", "shouldBeSplit": false}]
+
+================
+File: packages/archieve/aiResponse/json/Adds two numbers..json
+================
+[]
+
+================
+File: packages/archieve/aiResponse/json/Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments..json
+================
+[{
+  "arguments": "null",
+  "description": "Pulls the latest Arch Linux image from Docker Hub.",
+  "functionName": "pullLatestArchLinuxImage",
+  "isPrimeFunction": true,
+  "pseudocode": "1. Use the Docker CLI to pull the 'archlinux' image.\n2. Output success or failure.",
+  "returns": "string"
+}]
+
+================
+File: packages/archieve/aiResponse/json/Pulls the latest Arch Linux image from Docker Hub..json
+================
+[{
+  "arguments": "",
+  "description": "Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments.",
+  "functionName": "pullArchLinuxImage",
+  "isPrimeFunction": false,
+  "pseudocode": "function pullArchLinuxImage() {\n  // 1. Define the image name\n  // 2. Execute docker pull command with the image name\n}\n\nfunction getImageName() {\n  // 1. Returns the image name \"archlinux:latest\"\n}\n",
+  "returns": "string"
+},{
+  "arguments": "",
+  "description": "Retrieves the Arch Linux image name.",
+  "functionName": "getImageName",
+  "isPrimeFunction": true,
+  "pseudocode": "function getImageName() {\n  // Returns the image name \"archlinux:latest\"\n}\n",
+  "returns": "string"
+}]
+
+================
+File: packages/archieve/aiResponse/json/reverse a string with python.json
+================
+[{
+  "arguments": "string",
+  "description": "Reverses a string using Python's string slicing.",
+  "functionName": "reverse_string",
+  "isPrimeFunction": true,
+  "pseudocode": "return the string sliced from the end to the beginning with a step of -1",
+  "returns": "string"
+},
+{
+  "arguments": "string",
+  "description": "Takes a string as input and returns its reversed version.",
+  "functionName": "reverse_string_with_split_and_join",
+  "isPrimeFunction": false,
+  "pseudocode": "Split the string into a list of characters. Reverse the list of characters. Join the list of characters back into a string. Return the reversed string",
+  "returns": "string"
+}]
+
+================
+File: packages/archieve/aiResponse/json/Reverses a given string. This is the first part of the string reversal process..json
+================
+[{
+  "arguments": "string",
+  "description": "Reverses a given string. This is the first part of the string reversal process.",
+  "functionName": "reverseStringFirstPart",
+  "isPrimeFunction": false,
+  "pseudocode": "function reverseStringFirstPart(str):\n  return str.split('').reverse().join('')",
+  "returns": "string"
+}, {
+  "arguments": "string",
+  "description": "Reverses a given string.",
+  "functionName": "reverseString",
+  "isPrimeFunction": true,
+  "pseudocode": "function reverseString(str):\n  reversed = reverseStringFirstPart(str)\n  return reversed",
+  "returns": "string"
+}]
+
+================
+File: packages/archieve/aiResponse/json/run the arch linux docker image with shell functions.json
+================
+[{
+  "arguments": "string",
+  "description": "Run the arch linux docker image with shell functions",
+  "functionName": "runArchLinuxDocker",
+  "pseudocode": "func runArchLinuxDocker(commands: string) => string\n{\n  docker run --rm -it archlinux bash -c commands\n}",
+  "returns": "string",
+  "shouldBeSplit": false
+}]
+
+================
+File: packages/archieve/aiResponse/json/running arch linux using the docker cli.json
+================
+[{
+  "arguments": "none",
+  "description": "Pulls the latest Arch Linux image from Docker Hub.",
+  "functionName": "pullArchLinuxImage",
+  "isPrimeFunction": false,
+  "pseudocode": "docker pull archlinux",
+  "returns": "string"
+}, {
+  "arguments": "string",
+  "description": "Runs an Arch Linux container with the specified command.",
+  "functionName": "runArchLinuxContainer",
+  "isPrimeFunction": false,
+  "pseudocode": "docker run -it archlinux <command>",
+  "returns": "string"
+}]
+
+================
+File: packages/archieve/aiResponse/json/Runs an Arch Linux container with the specified command. This is the first part of the function..json
+================
+[]
+
+================
+File: packages/archieve/aiResponse/json/Runs an Arch Linux container with the specified command..json
+================
+[{
+  "arguments": "command: string",
+  "description": "Runs an Arch Linux container with the specified command. This is the first part of the function.",
+  "functionName": "runArchLinuxContainer_setup",
+  "isPrimeFunction": false,
+  "pseudocode": "1. Create a temporary directory.\n2. Pull the Arch Linux Docker image.\n3. Start a Docker container using the Arch Linux image and mount the temporary directory.\n4. Return the container ID.",
+  "returns": "containerId: string"
+}, {
+  "arguments": "containerId: string, command: string",
+  "description": "Runs a command inside an existing Arch Linux container. This is the second part of the function.",
+  "functionName": "runArchLinuxContainer_execute",
+  "isPrimeFunction": true,
+  "pseudocode": "1. Execute the specified command inside the Docker container using docker exec.\n2. Return the output and exit code.",
+  "returns": "output: string, exitCode: number"
+}]
+
+================
+File: packages/archieve/aiResponse/json/Takes a string as input and returns its reversed version..json
+================
+[
+  {
+    "arguments": "string",
+    "description": "Reverses a given string. This is the first part of the string reversal process.",
+    "functionName": "reverseStringFirstPart",
+    "isPrimeFunction": false,
+    "pseudocode": "1. Initialize an empty string called 'reversed_string'.\n2. Iterate through the input string from the end to the beginning.\n3. In each iteration, append the current character to 'reversed_string'.\n4. Return the 'reversed_string'.",
+    "returns": "string"
+  },
+  {
+    "arguments": "string",
+    "description": "Reverses a given string. This is the second part of the string reversal process.",
+    "functionName": "reverseStringSecondPart",
+    "isPrimeFunction": false,
+    "pseudocode": "1. Call the reverseStringFirstPart function with the input string.\n2. Return the result of the function call.",
+    "returns": "string"
+  }
+]
+
+================
+File: packages/archieve/taskTrees/_add_two_numbers_with_javascript.json
+================
+{
+    "task": {
+        "functionName": "add two numbers with javascript",
+        "arguments": "{string",
+        "returns": "none",
+        "description": "add two numbers with javascript",
+        "shouldBeSplit": true,
+        "pseudocode": "(input) => reverseOfInput"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "addNumbers",
+                "description": "Adds two numbers and returns the sum.",
+                "shouldBeSplit": false,
+                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                "arguments": "a: number, b: number",
+                "returns": "number"
+            },
+            "subTasks": [
+                {
+                    "task": {
+                        "functionName": "addNumbers",
+                        "description": "Adds two numbers and returns the sum.",
+                        "shouldBeSplit": false,
+                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                        "arguments": "number, number",
+                        "returns": "number"
+                    },
+                    "subTasks": [
+                        {
+                            "task": {
+                                "functionName": "addNumbers",
+                                "description": "Adds two numbers and returns the sum.",
+                                "shouldBeSplit": false,
+                                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                "arguments": "number, number",
+                                "returns": "number"
+                            },
+                            "subTasks": [
+                                {
+                                    "task": {
+                                        "functionName": "addNumbers",
+                                        "description": "Adds two numbers and returns the sum.",
+                                        "shouldBeSplit": false,
+                                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                        "arguments": "number, number",
+                                        "returns": "number"
+                                    },
+                                    "subTasks": [
+                                        {
+                                            "task": {
+                                                "functionName": "addNumbers",
+                                                "description": "Adds two numbers and returns the sum.",
+                                                "shouldBeSplit": false,
+                                                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                "arguments": "number, number",
+                                                "returns": "number"
+                                            },
+                                            "subTasks": [
+                                                {
+                                                    "task": {
+                                                        "functionName": "addNumbers",
+                                                        "description": "Adds two numbers and returns the sum.",
+                                                        "shouldBeSplit": false,
+                                                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                        "arguments": "a: number, b: number",
+                                                        "returns": "number"
+                                                    },
+                                                    "subTasks": [
+                                                        {
+                                                            "task": {
+                                                                "functionName": "addNumbers",
+                                                                "description": "Adds two numbers and returns the sum.",
+                                                                "shouldBeSplit": false,
+                                                                "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                                "arguments": "a: number, b: number",
+                                                                "returns": "number"
+                                                            },
+                                                            "subTasks": [
+                                                                {
+                                                                    "task": {
+                                                                        "functionName": "addNumbers",
+                                                                        "description": "Adds two numbers and returns the sum.",
+                                                                        "shouldBeSplit": false,
+                                                                        "pseudocode": "function addNumbers(num1, num2):\n  return num1 + num2",
+                                                                        "arguments": "num1: number, num2: number",
+                                                                        "returns": "number"
+                                                                    },
+                                                                    "subTasks": [
+                                                                        {
+                                                                            "task": {
+                                                                                "functionName": "add",
+                                                                                "description": "Adds two numbers and returns the sum.",
+                                                                                "shouldBeSplit": false,
+                                                                                "pseudocode": "function add(a, b) {\n  return a + b;\n}",
+                                                                                "arguments": "number a, number b",
+                                                                                "returns": "number"
+                                                                            },
+                                                                            "subTasks": [
+                                                                                {
+                                                                                    "task": {
+                                                                                        "functionName": "addNumbers",
+                                                                                        "description": "Adds two numbers and returns the sum.",
+                                                                                        "shouldBeSplit": false,
+                                                                                        "pseudocode": "function addNumbers(a, b) {\n  return a + b;\n}",
+                                                                                        "arguments": "number, number",
+                                                                                        "returns": "number"
+                                                                                    },
+                                                                                    "subTasks": []
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+================
+File: packages/archieve/taskTrees/_reverse_a_string_with_python.json
+================
+{
+    "task": {
+        "functionName": "reverse a string with python",
+        "arguments": "{string",
+        "returns": "none",
+        "description": "reverse a string with python",
+        "isPrimeFunction": false,
+        "pseudocode": "(input) => reverseOfInput"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "reverse_string_slice",
+                "description": "Reverses a string using slicing.",
+                "isPrimeFunction": true,
+                "pseudocode": "return the string reversed using slicing",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": []
+        },
+        {
+            "task": {
+                "functionName": "reverse_string_loop",
+                "description": "Reverses a string using a loop.",
+                "isPrimeFunction": true,
+                "pseudocode": "Iterate over the string backwards and build a new string.",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": []
+        }
+    ]
+}
+
+================
+File: packages/archieve/taskTrees/_run_the_arch_linux_docker_image_with_shell_functions.json
+================
+{
+    "task": {
+        "functionName": "main",
+        "arguments": "void",
+        "returns": "void",
+        "description": "main task",
+        "shouldBeSplit": true,
+        "pseudocode": "main()"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "runArchLinuxDocker",
+                "description": "Run the arch linux docker image with shell functions",
+                "shouldBeSplit": false,
+                "pseudocode": "func runArchLinuxDocker(commands: string) => string\n{\n  docker run --rm -it archlinux bash -c commands\n}",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": []
+        }
+    ]
+}
+
+================
+File: packages/archieve/taskTrees/_running_arch_linux_using_the_docker_cli.json
+================
+{
+    "task": {
+        "functionName": "running arch linux using the docker cli",
+        "arguments": "{string",
+        "returns": "none",
+        "description": "running arch linux using the docker cli",
+        "isPrimeFunction": false,
+        "pseudocode": "(input) => reverseOfInput"
+    },
+    "subTasks": [
+        {
+            "task": {
+                "functionName": "pullArchLinuxImage",
+                "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                "isPrimeFunction": false,
+                "pseudocode": "docker pull archlinux",
+                "arguments": "none",
+                "returns": "string"
+            },
+            "subTasks": [
+                {
+                    "task": {
+                        "functionName": "pullArchLinuxImage",
+                        "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                        "isPrimeFunction": false,
+                        "pseudocode": "function pullArchLinuxImage() {\n  // 1. Define a function to pull the image using a Docker command, returning a promise or similar based on the underlying command execution.\n  // 2. Use a promise-based approach (async/await or .then()) to handle the command execution.\n  // 3. Catch any errors during the pull and handle them.\n  // 4. Return a message indicating success or failure.\n  // Example (conceptual):\n  // async function pullArchLinuxImage() {\n  //   try {\n  //     await executeDockerCommand('docker pull archlinux');\n  //     return 'Arch Linux image pulled successfully.';\n  //   } catch (error) {\n  //     return 'Error pulling Arch Linux image: ' + error.message;\n  //   }\n  // }\n}",
+                        "arguments": "",
+                        "returns": "string"
+                    },
+                    "subTasks": [
+                        {
+                            "task": {
+                                "functionName": "pull_arch_linux_image",
+                                "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                                "isPrimeFunction": false,
+                                "pseudocode": "function pull_arch_linux_image():\n    // Function 1: Check if the image exists locally\n    image_exists = check_local_image()\n    // Function 2: Pull the image if it doesn't exist\n    if not image_exists:\n        pull_docker_image()\n    return \"Arch Linux image pulled successfully\"",
+                                "arguments": "",
+                                "returns": "string"
+                            },
+                            "subTasks": [
+                                {
+                                    "task": {
+                                        "functionName": "pull_arch_linux_image",
+                                        "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                                        "isPrimeFunction": false,
+                                        "pseudocode": "1. Define a function to pull the latest Arch Linux image.\n2. Call the docker pull command to fetch the image from Docker Hub.\n3. Optionally, provide a success/failure message.",
+                                        "arguments": "",
+                                        "returns": "string"
+                                    },
+                                    "subTasks": [
+                                        {
+                                            "task": {
+                                                "functionName": "pullArchLinuxImage",
+                                                "description": "Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments.",
+                                                "isPrimeFunction": false,
+                                                "pseudocode": "function pullArchLinuxImage() {\n  // 1. Define the image name\n  // 2. Execute docker pull command with the image name\n}\n\nfunction getImageName() {\n  // 1. Returns the image name \"archlinux:latest\"\n}\n",
+                                                "arguments": "",
+                                                "returns": "string"
+                                            },
+                                            "subTasks": [
+                                                {
+                                                    "task": {
+                                                        "functionName": "pullLatestArchImage",
+                                                        "description": "Pulls the latest Arch Linux image from Docker Hub. This function does not take any arguments.",
+                                                        "isPrimeFunction": false,
+                                                        "pseudocode": "function pullLatestArchImage():\n  // 1. Execute the docker pull command for the archlinux image.\n  // 2. Handle potential errors (e.g., image not found, network issues).\n  // 3. Return success or failure message.\n  pass",
+                                                        "arguments": "string",
+                                                        "returns": "string"
+                                                    },
+                                                    "subTasks": [
+                                                        {
+                                                            "task": {
+                                                                "functionName": "pullLatestArchLinuxImage",
+                                                                "description": "Pulls the latest Arch Linux image from Docker Hub.",
+                                                                "isPrimeFunction": true,
+                                                                "pseudocode": "1. Use the Docker CLI to pull the 'archlinux' image.\n2. Output success or failure.",
+                                                                "arguments": "null",
+                                                                "returns": "string"
+                                                            },
+                                                            "subTasks": []
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "task": {
+                                                        "functionName": "executeDockerPull",
+                                                        "description": "Executes the docker pull command for the specified image.",
+                                                        "isPrimeFunction": true,
+                                                        "pseudocode": "function executeDockerPull(imageName: string): // input is the image name to pull\n  // 1. Construct the docker pull command string.\n  // 2. Execute the command using a suitable library or method (e.g., subprocess).\n  // 3. Capture the output and error streams.\n  // 4. Analyze the output to determine success or failure.\n  // 5. Return a success/failure message with relevant details.\n  pass",
+                                                        "arguments": "string",
+                                                        "returns": "string"
+                                                    },
+                                                    "subTasks": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "task": {
+                                                "functionName": "getImageName",
+                                                "description": "Retrieves the Arch Linux image name.",
+                                                "isPrimeFunction": true,
+                                                "pseudocode": "function getImageName() {\n  // Returns the image name \"archlinux:latest\"\n}\n",
+                                                "arguments": "",
+                                                "returns": "string"
+                                            },
+                                            "subTasks": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "task": {
+                                        "functionName": "execute_docker_pull",
+                                        "description": "Helper function to execute the docker pull command.",
+                                        "isPrimeFunction": true,
+                                        "pseudocode": "1. Construct the docker pull command: 'docker pull archlinux/archlinux:latest'.\n2. Execute the command using a subprocess or similar method.\n3. Return the result of the command execution.",
+                                        "arguments": "",
+                                        "returns": "string"
+                                    },
+                                    "subTasks": []
+                                }
+                            ]
+                        },
+                        {
+                            "task": {
+                                "functionName": "check_local_image",
+                                "description": "Checks if the Arch Linux image exists locally.",
+                                "isPrimeFunction": true,
+                                "pseudocode": "function check_local_image():\n    // Use docker command to inspect the image\n    if docker image exists:\n        return True\n    else:\n        return False",
+                                "arguments": "",
+                                "returns": "boolean"
+                            },
+                            "subTasks": []
+                        }
+                    ]
+                },
+                {
+                    "task": {
+                        "functionName": "executeDockerCommand",
+                        "description": "Executes a Docker command.",
+                        "isPrimeFunction": true,
+                        "pseudocode": "function executeDockerCommand(command) {\n  // 1. Use a library or function to execute shell commands (e.g., child_process in Node.js).\n  // 2. Pass the provided `command` to the shell execution function.\n  // 3. Return a promise that resolves when the command completes.\n  // 4. If the command fails, reject the promise with an error.\n  // Example (conceptual):\n  // function executeDockerCommand(command) {\n  //   return new Promise((resolve, reject) => {\n  //     const child = exec(command, (error, stdout, stderr) => {\n  //       if (error) {\n  //         reject(error);\n  //         return;\n  //       }\n  //       resolve(stdout || stderr);\n  //     });\n  //   });\n  // }\n}",
+                        "arguments": "string",
+                        "returns": "string"
+                    },
+                    "subTasks": []
+                }
+            ]
+        },
+        {
+            "task": {
+                "functionName": "runArchLinuxContainer",
+                "description": "Runs an Arch Linux container with the specified command.",
+                "isPrimeFunction": false,
+                "pseudocode": "docker run -it archlinux <command>",
+                "arguments": "string",
+                "returns": "string"
+            },
+            "subTasks": [
+                {
+                    "task": {
+                        "functionName": "runArchLinuxContainer_setup",
+                        "description": "Runs an Arch Linux container with the specified command. This is the first part of the function.",
+                        "isPrimeFunction": false,
+                        "pseudocode": "1. Create a temporary directory.\n2. Pull the Arch Linux Docker image.\n3. Start a Docker container using the Arch Linux image and mount the temporary directory.\n4. Return the container ID.",
+                        "arguments": "command: string",
+                        "returns": "containerId: string"
+                    },
+                    "subTasks": []
+                },
+                {
+                    "task": {
+                        "functionName": "runArchLinuxContainer_execute",
+                        "description": "Runs a command inside an existing Arch Linux container. This is the second part of the function.",
+                        "isPrimeFunction": true,
+                        "pseudocode": "1. Execute the specified command inside the Docker container using docker exec.\n2. Return the output and exit code.",
+                        "arguments": "containerId: string, command: string",
+                        "returns": "output: string, exitCode: number"
+                    },
+                    "subTasks": []
+                }
+            ]
+        }
+    ]
+}
+
+================
+File: packages/archieve/generateFunctionTree copy.ts
+================
+// import { SchemaType, type ResponseSchema } from "@google/generative-ai";
+// import { getAiResponse } from "./getAiResponse";
+// import { getSubTasksPrompt } from "./prompts/getSplitTaskPrompt";
+// import { sleep } from "./sleep";
+// import { z } from "zod";
+// import { write } from "bun";
+
+// // Define a zod schema for each task.
+// const TaskSchema = z.object({
+//   functionName: z.string(),
+//   description: z.string(),
+//   shouldBeSplit: z.boolean(),
+//   pseudocode: z.string(),
+//   arguments: z.string(),
+//   returns: z.string(),
+// });
+
+// // Define the expected JSON schema for the API response.
+// const functionTreeShcema: ResponseSchema = {
+//   description: "A tree structure of functions",
+//   type: SchemaType.ARRAY,
+//   items: {
+//     type: SchemaType.OBJECT,
+//     properties: {
+//       functionName: {
+//         type: SchemaType.STRING,
+//         description: "Name of the function",
+//         nullable: false,
+//       },
+//       description: {
+//         type: SchemaType.STRING,
+//         description: "Description of the function",
+//         nullable: false,
+//       },
+//       arguments: {
+//         type: SchemaType.STRING,
+//         description:
+//           "Arguments shape and type of the function written as a zod schema",
+//         nullable: false,
+//       },
+//       returns: {
+//         type: SchemaType.STRING,
+//         description:
+//           "Return shape and type of the function written as a zod schema",
+//         nullable: false,
+//       },
+//       shouldBeSplit: {
+//         type: SchemaType.BOOLEAN,
+//         description:
+//           "Whether the function should be split into smaller functions",
+//         nullable: false,
+//       },
+//       pseudocode: {
+//         type: SchemaType.STRING,
+//         description:
+//           "minimal pseudocode of the function with syntax similar to Typescript, don't inlcude any comments. for example: `func addTwoNumbers(x: number, y: number) => number (x + y)`",
+//         nullable: false,
+//       },
+//     },
+//     required: [
+//       "functionName",
+//       "description",
+//       "arguments",
+//       "returns",
+//       "shouldBeSplit",
+//       "pseudocode",
+//     ],
+//   },
+// };
+
+// // This function sends the task to the AI and returns a JSON string representing an array of sub tasks.
+// export const splitTask = async (task: string): Promise<string> => {
+//   const prompt = getSubTasksPrompt(task);
+//   const tasks = await getAiResponse({
+//     task,
+//     prompt,
+//     responseMimeType: "application/json",
+//     responseSchema: functionTreeShcema,
+//   });
+//   return tasks;
+// };
+
+// // Define the basic task type returned by splitTask.
+// export type Task = z.infer<typeof TaskSchema>;
+
+// // Define the tree node type.
+// export type TaskNode = {
+//   task: Task;
+//   subTasks: TaskNode[];
+// };
+
+// // Global constant for maximum recursive depth.
+// const MAX_RECURSIVE_DEPTH = 10;
+
+// /**
+//  * Recursively builds a tree branch for a given task.
+//  *
+//  * @param task - The current task to process.
+//  * @param currentDepth - The current depth in the recursion.
+//  * @returns A TaskNode representing the task and its (possibly recursive) subtasks.
+//  */
+// const buildSubTree = async (
+//   task: Task,
+//   currentDepth: number
+// ): Promise<TaskNode> => {
+//   // Stop recursion if the task is basic or we've reached the maximum depth.
+//   if (!task.shouldBeSplit || currentDepth >= MAX_RECURSIVE_DEPTH) {
+//     return { task, subTasks: [] };
+//   }
+
+//   // Call splitTask to get the subtasks.
+//   const responseString = await splitTask(task.description);
+//   let subTaskResults: Task[] = JSON.parse(responseString).map((item: any) =>
+//     TaskSchema.parse(item)
+//   );
+
+//   // Limit to at most 2 subtasks.
+//   // subTaskResults = subTaskResults.slice(0, 2);
+
+//   // Recursively process each subtask.
+//   const children: TaskNode[] = [];
+//   for (const subTask of subTaskResults) {
+//     const childNode = await buildSubTree(subTask, currentDepth + 1);
+//     children.push(childNode);
+//   }
+
+//   return { task, subTasks: children };
+// };
+
+// /**
+//  * Builds the complete task tree starting from an initial task string.
+//  *
+//  * The root node is created from the initial string, then splitTask is called
+//  * to generate the first level of subtasks.
+//  *
+//  * @param initialTask - The initial task as a string.
+//  * @returns A TaskNode representing the full tree.
+//  */
+// export const buildTaskTree = async (initialTask: string): Promise<TaskNode> => {
+//   // Create a root TaskResult from the input string.
+//   const rootTask: Task = {
+//     functionName: "main",
+//     arguments: "void",
+//     returns: "void",
+//     description: "main task",
+//     shouldBeSplit: true,
+//     pseudocode: "main()",
+//   };
+
+//   // Split the root task into subtasks.
+//   const responseString = await splitTask(initialTask);
+//   let subTaskResults: Task[] = JSON.parse(responseString).map((item: any) =>
+//     TaskSchema.parse(item)
+//   );
+
+//   // Limit to at most 2 subtasks.
+//   // subTaskResults = subTaskResults.slice(0, 2);
+
+//   // Build the children recursively.
+//   const children: TaskNode[] = [];
+//   for (const subTask of subTaskResults) {
+//     const childNode = await buildSubTree(subTask, 1);
+//     children.push(childNode);
+//   }
+
+//   return { task: rootTask, subTasks: children };
+// };
+
+// const MAIN_TASK = "run the arch linux docker image with shell functions";
+
+// const taskTree = await buildTaskTree(MAIN_TASK);
+
+// console.log(JSON.stringify(taskTree, null, 2));
+// const taskTreeFilePath =
+//   "./taskTrees/" +
+//   Date.now().toFixed().slice(-1, -4) +
+//   "_" +
+//   MAIN_TASK.replaceAll(" ", "_") +
+//   ".json";
+// // write(taskTreeFilePath, JSON.stringify(taskTree, null, 4));
+// // console.log(taskTreeFilePath);
+// write("./functionTree.json", JSON.stringify(taskTree, null, 2));
+
+================
+File: packages/archieve/package.json
+================
+{
+  "name": "@ronin/archieve",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/config": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}
+
+================
+File: packages/archieve/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/config/index.ts
+================
+// export const aiModel = "gemini-2.0-flash-thinking-exp";
+export const aiModelNameString = "gemini-2.0-flash-lite-preview-02-05";
+export const systemInstruction = "Only reply in json format";
+export default {
+  aiModelNameString,
+  systemInstruction,
+};
+
+================
+File: packages/config/package.json
+================
+{
+  "name": "@ronin/config",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/prompts": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}
+
+================
+File: packages/config/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "bundler",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/docs/bun/plugins.md
+================
+Bun provides a universal plugin API that can be used to extend both the _runtime_ and [_bundler_](https://bun.sh/docs/bundler).
+
+Plugins intercept imports and perform custom loading logic: reading files, transpiling code, etc. They can be used to add support for additional file types, like `.scss` or `.yaml`. In the context of Bun's bundler, plugins can be used to implement framework-level features like CSS extraction, macros, and client-server code co-location.
+
+## Usage
+
+A plugin is defined as simple JavaScript object containing a `name` property and a `setup` function. Register a plugin with Bun using the `plugin` function.
+
+```tsx#myPlugin.ts
+import { plugin, type BunPlugin } from "bun";
+
+const myPlugin: BunPlugin = {
+  name: "Custom loader",
+  setup(build) {
+    // implementation
+  },
+};
+
+plugin(myPlugin);
+```
+
+Plugins have to be loaded before any other code runs! To achieve this, use the `preload` option in your [`bunfig.toml`](https://bun.sh/docs/runtime/bunfig). Bun automatically loads the files/modules specified in `preload` before running a file.
+
+```toml
+preload = ["./myPlugin.ts"]
+```
+
+To preload files before `bun test`:
+
+```toml
+[test]
+preload = ["./myPlugin.ts"]
+```
+
+## Third-party plugins
+
+By convention, third-party plugins intended for consumption should export a factory function that accepts some configuration and returns a plugin object.
+
+```ts
+import { plugin } from "bun";
+import fooPlugin from "bun-plugin-foo";
+
+plugin(
+  fooPlugin({
+    // configuration
+  }),
+);
+```
+
+Bun's plugin API is loosely based on [esbuild](https://esbuild.github.io/plugins). Only [a subset](https://bun.sh/docs/bundler/vs-esbuild#plugin-api) of the esbuild API is implemented, but some esbuild plugins "just work" in Bun, like the official [MDX loader](https://mdxjs.com/packages/esbuild/):
+
+```jsx
+import { plugin } from "bun";
+import mdx from "@mdx-js/esbuild";
+
+plugin(mdx());
+```
+
+## Loaders
+
+Plugins are primarily used to extend Bun with loaders for additional file types. Let's look at a simple plugin that implements a loader for `.yaml` files.
+
+```ts#yamlPlugin.ts
+import { plugin } from "bun";
+
+await plugin({
+  name: "YAML",
+  async setup(build) {
+    const { load } = await import("js-yaml");
+
+    // when a .yaml file is imported...
+    build.onLoad({ filter: /\.(yaml|yml)$/ }, async (args) => {
+
+      // read and parse the file
+      const text = await Bun.file(args.path).text();
+      const exports = load(text) as Record<string, any>;
+
+      // and returns it as a module
+      return {
+        exports,
+        loader: "object", // special loader for JS objects
+      };
+    });
+  },
+});
+```
+
+Register this file in `preload`:
+
+```toml#bunfig.toml
+preload = ["./yamlPlugin.ts"]
+```
+
+Once the plugin is registered, `.yaml` and `.yml` files can be directly imported.
+
+{% codetabs %}
+
+```ts#index.ts
+import data from "./data.yml"
+
+console.log(data);
+```
+
+```yaml#data.yml
+name: Fast X
+releaseYear: 2023
+```
+
+{% /codetabs %}
+
+Note that the returned object has a `loader` property. This tells Bun which of its internal loaders should be used to handle the result. Even though we're implementing a loader for `.yaml`, the result must still be understandable by one of Bun's built-in loaders. It's loaders all the way down.
+
+In this case we're using `"object"`—a built-in loader (intended for use by plugins) that converts a plain JavaScript object to an equivalent ES module. Any of Bun's built-in loaders are supported; these same loaders are used by Bun internally for handling files of various kinds. The table below is a quick reference; refer to [Bundler > Loaders](https://bun.sh/docs/bundler/loaders) for complete documentation.
+
+{% table %}
+
+- Loader
+- Extensions
+- Output
+
+---
+
+- `js`
+- `.mjs` `.cjs`
+- Transpile to JavaScript files
+
+---
+
+- `jsx`
+- `.js` `.jsx`
+- Transform JSX then transpile
+
+---
+
+- `ts`
+- `.ts` `.mts` `.cts`
+- Transform TypeScript then transpile
+
+---
+
+- `tsx`
+- `.tsx`
+- Transform TypeScript, JSX, then transpile
+
+---
+
+- `toml`
+- `.toml`
+- Parse using Bun's built-in TOML parser
+
+---
+
+- `json`
+- `.json`
+- Parse using Bun's built-in JSON parser
+
+---
+
+- `napi`
+- `.node`
+- Import a native Node.js addon
+
+---
+
+- `wasm`
+- `.wasm`
+- Import a native Node.js addon
+
+---
+
+- `object`
+- _none_
+- A special loader intended for plugins that converts a plain JavaScript object to an equivalent ES module. Each key in the object corresponds to a named export.
+
+{% /callout %}
+
+Loading a YAML file is useful, but plugins support more than just data loading. Let's look at a plugin that lets Bun import `*.svelte` files.
+
+```ts#sveltePlugin.ts
+import { plugin } from "bun";
+
+await plugin({
+  name: "svelte loader",
+  async setup(build) {
+    const { compile } = await import("svelte/compiler");
+
+    // when a .svelte file is imported...
+    build.onLoad({ filter: /\.svelte$/ }, async ({ path }) => {
+
+      // read and compile it with the Svelte compiler
+      const file = await Bun.file(path).text();
+      const contents = compile(file, {
+        filename: path,
+        generate: "ssr",
+      }).js.code;
+
+      // and return the compiled source code as "js"
+      return {
+        contents,
+        loader: "js",
+      };
+    });
+  },
+});
+```
+
+> Note: in a production implementation, you'd want to cache the compiled output and include additional error handling.
+
+The object returned from `build.onLoad` contains the compiled source code in `contents` and specifies `"js"` as its loader. That tells Bun to consider the returned `contents` to be a JavaScript module and transpile it using Bun's built-in `js` loader.
+
+With this plugin, Svelte components can now be directly imported and consumed.
+
+```js
+import "./sveltePlugin.ts";
+import MySvelteComponent from "./component.svelte";
+
+console.log(MySvelteComponent.render());
+```
+
+## Virtual Modules
+
+{% note %}
+
+This feature is currently only available at runtime with `Bun.plugin` and not yet supported in the bundler, but you can mimic the behavior using `onResolve` and `onLoad`.
+
+{% /note %}
+
+To create virtual modules at runtime, use `builder.module(specifier, callback)` in the `setup` function of a `Bun.plugin`.
+
+For example:
+
+```js
+import { plugin } from "bun";
+
+plugin({
+  name: "my-virtual-module",
+
+  setup(build) {
+    build.module(
+      // The specifier, which can be any string - except a built-in, such as "buffer"
+      "my-transpiled-virtual-module",
+      // The callback to run when the module is imported or required for the first time
+      () => {
+        return {
+          contents: "console.log('hello world!')",
+          loader: "js",
+        };
+      },
+    );
+
+    build.module("my-object-virtual-module", () => {
+      return {
+        exports: {
+          foo: "bar",
+        },
+        loader: "object",
+      };
+    });
+  },
+});
+
+// Sometime later
+// All of these work
+import "my-transpiled-virtual-module";
+require("my-transpiled-virtual-module");
+await import("my-transpiled-virtual-module");
+require.resolve("my-transpiled-virtual-module");
+
+import { foo } from "my-object-virtual-module";
+const object = require("my-object-virtual-module");
+await import("my-object-virtual-module");
+require.resolve("my-object-virtual-module");
+```
+
+### Overriding existing modules
+
+You can also override existing modules with `build.module`.
+
+```js
+import { plugin } from "bun";
+build.module("my-object-virtual-module", () => {
+  return {
+    exports: {
+      foo: "bar",
+    },
+    loader: "object",
+  };
+});
+
+require("my-object-virtual-module"); // { foo: "bar" }
+await import("my-object-virtual-module"); // { foo: "bar" }
+
+build.module("my-object-virtual-module", () => {
+  return {
+    exports: {
+      baz: "quix",
+    },
+    loader: "object",
+  };
+});
+require("my-object-virtual-module"); // { baz: "quix" }
+await import("my-object-virtual-module"); // { baz: "quix" }
+```
+
+## Reading or modifying the config
+
+Plugins can read and write to the [build config](https://bun.sh/docs/bundler#api) with `build.config`.
+
+```ts
+await Bun.build({
+  entrypoints: ["./app.ts"],
+  outdir: "./dist",
+  sourcemap: "external",
+  plugins: [
+    {
+      name: "demo",
+      setup(build) {
+        console.log(build.config.sourcemap); // "external"
+
+        build.config.minify = true; // enable minification
+
+        // `plugins` is readonly
+        console.log(`Number of plugins: ${build.config.plugins.length}`);
+      },
+    },
+  ],
+});
+```
+
+{% callout %}
+
+**NOTE**: Plugin lifcycle callbacks (`onStart()`, `onResolve()`, etc.) do not have the ability to modify the `build.config` object in the `setup()` function. If you want to mutate `build.config`, you must do so directly in the `setup()` function:
+
+```ts
+await Bun.build({
+  entrypoints: ["./app.ts"],
+  outdir: "./dist",
+  sourcemap: "external",
+  plugins: [
+    {
+      name: "demo",
+      setup(build) {
+        // ✅ good! modifying it directly in the setup() function
+        build.config.minify = true;
+
+        build.onStart(() => {
+          // 🚫 uh-oh! this won't work!
+          build.config.minify = false;
+        });
+      },
+    },
+  ],
+});
+```
+
+{% /callout %}
+
+## Lifecycle hooks
+
+Plugins can register callbacks to be run at various points in the lifecycle of a bundle:
+
+- [`onStart()`](#onstart): Run once the bundler has started a bundle
+- [`onResolve()`](#onresolve): Run before a module is resolved
+- [`onLoad()`](#onload): Run before a module is loaded.
+
+### Reference
+
+A rough overview of the types (please refer to Bun's `bun.d.ts` for the full type definitions):
+
+```ts
+namespace Bun {
+  function plugin(plugin: {
+    name: string;
+    setup: (build: PluginBuilder) => void;
+  }): void;
+}
+
+type PluginBuilder = {
+  onStart(callback: () => void): void;
+  onResolve: (
+    args: { filter: RegExp; namespace?: string },
+    callback: (args: { path: string; importer: string }) => {
+      path: string;
+      namespace?: string;
+    } | void,
+  ) => void;
+  onLoad: (
+    args: { filter: RegExp; namespace?: string },
+    callback: (args: { path: string }) => {
+      loader?: Loader;
+      contents?: string;
+      exports?: Record<string, any>;
+    },
+  ) => void;
+  config: BuildConfig;
+};
+
+type Loader = "js" | "jsx" | "ts" | "tsx" | "css" | "json" | "toml" | "object";
+```
+
+### Namespaces
+
+`onLoad` and `onResolve` accept an optional `namespace` string. What is a namespaace?
+
+Every module has a namespace. Namespaces are used to prefix the import in transpiled code; for instance, a loader with a `filter: /\.yaml$/` and `namespace: "yaml:"` will transform an import from `./myfile.yaml` into `yaml:./myfile.yaml`.
+
+The default namespace is `"file"` and it is not necessary to specify it, for instance: `import myModule from "./my-module.ts"` is the same as `import myModule from "file:./my-module.ts"`.
+
+Other common namespaces are:
+
+- `"bun"`: for Bun-specific modules (e.g. `"bun:test"`, `"bun:sqlite"`)
+- `"node"`: for Node.js modules (e.g. `"node:fs"`, `"node:path"`)
+
+### `onStart`
+
+```ts
+onStart(callback: () => void): Promise<void> | void;
+```
+
+Registers a callback to be run when the bundler starts a new bundle.
+
+```ts
+import { plugin } from "bun";
+
+plugin({
+  name: "onStart example",
+
+  setup(build) {
+    build.onStart(() => {
+      console.log("Bundle started!");
+    });
+  },
+});
+```
+
+The callback can return a `Promise`. After the bundle process has initialized, the bundler waits until all `onStart()` callbacks have completed before continuing.
+
+For example:
+
+```ts
+const result = await Bun.build({
+  entrypoints: ["./app.ts"],
+  outdir: "./dist",
+  sourcemap: "external",
+  plugins: [
+    {
+      name: "Sleep for 10 seconds",
+      setup(build) {
+        build.onStart(async () => {
+          await Bunlog.sleep(10_000);
+        });
+      },
+    },
+    {
+      name: "Log bundle time to a file",
+      setup(build) {
+        build.onStart(async () => {
+          const now = Date.now();
+          await Bun.$`echo ${now} > bundle-time.txt`;
+        });
+      },
+    },
+  ],
+});
+```
+
+In the above example, Bun will wait until the first `onStart()` (sleeping for 10 seconds) has completed, _as well as_ the second `onStart()` (writing the bundle time to a file).
+
+Note that `onStart()` callbacks (like every other lifecycle callback) do not have the ability to modify the `build.config` object. If you want to mutate `build.config`, you must do so directly in the `setup()` function.
+
+### `onResolve`
+
+```ts
+onResolve(
+  args: { filter: RegExp; namespace?: string },
+  callback: (args: { path: string; importer: string }) => {
+    path: string;
+    namespace?: string;
+  } | void,
+): void;
+```
+
+To bundle your project, Bun walks down the dependency tree of all modules in your project. For each imported module, Bun actually has to find and read that module. The "finding" part is known as "resolving" a module.
+
+The `onResolve()` plugin lifecycle callback allows you to configure how a module is resolved.
+
+The first argument to `onResolve()` is an object with a `filter` and [`namespace`](#what-is-a-namespace) property. The filter is a regular expression which is run on the import string. Effectively, these allow you to filter which modules your custom resolution logic will apply to.
+
+The second argument to `onResolve()` is a callback which is run for each module import Bun finds that matches the `filter` and `namespace` defined in the first argument.
+
+The callback receives as input the _path_ to the matching module. The callback can return a _new path_ for the module. Bun will read the contents of the _new path_ and parse it as a module.
+
+For example, redirecting all imports to `images/` to `./public/images/`:
+
+```ts
+import { plugin } from "bun";
+
+plugin({
+  name: "onResolve example",
+  setup(build) {
+    build.onResolve({ filter: /.*/, namespace: "file" }, args => {
+      if (args.path.startsWith("images/")) {
+        return {
+          path: args.path.replace("images/", "./public/images/"),
+        };
+      }
+    });
+  },
+});
+```
+
+### `onLoad`
+
+```ts
+onLoad(
+  args: { filter: RegExp; namespace?: string },
+  callback: (args: { path: string, importer: string, namespace: string, kind: ImportKind  }) => {
+    loader?: Loader;
+    contents?: string;
+    exports?: Record<string, any>;
+  },
+): void;
+```
+
+After Bun's bundler has resolved a module, it needs to read the contents of the module and parse it.
+
+The `onLoad()` plugin lifecycle callback allows you to modify the _contents_ of a module before it is read and parsed by Bun.
+
+Like `onResolve()`, the first argument to `onLoad()` allows you to filter which modules this invocation of `onLoad()` will apply to.
+
+The second argument to `onLoad()` is a callback which is run for each matching module _before_ Bun loads the contents of the module into memory.
+
+This callback receives as input the _path_ to the matching module, the _importer_ of the module (the module that imported the module), the _namespace_ of the module, and the _kind_ of the module.
+
+The callback can return a new `contents` string for the module as well as a new `loader`.
+
+For example:
+
+```ts
+import { plugin } from "bun";
+
+plugin({
+  name: "env plugin",
+  setup(build) {
+    build.onLoad({ filter: /env/, namespace: "file" }, args => {
+      return {
+        contents: `export default ${JSON.stringify(process.env)}`,
+        loader: "js",
+      };
+    });
+  },
+});
+```
+
+This plugin will transform all imports of the form `import env from "env"` into a JavaScript module that exports the current environment variables.
+
+================
+File: packages/docs/bun/workspaces.md
+================
+Bun supports [`workspaces`](https://docs.npmjs.com/cli/v9/using-npm/workspaces?v=true#description) in `package.json`. Workspaces make it easy to develop complex software as a _monorepo_ consisting of several independent packages.
+
+It's common for a monorepo to have the following structure:
+
+```
+tree
+<root>
+├── README.md
+├── bun.lock
+├── package.json
+├── tsconfig.json
+└── packages
+    ├── pkg-a
+    │   ├── index.ts
+    │   ├── package.json
+    │   └── tsconfig.json
+    ├── pkg-b
+    │   ├── index.ts
+    │   ├── package.json
+    │   └── tsconfig.json
+    └── pkg-c
+        ├── index.ts
+        ├── package.json
+        └── tsconfig.json
+```
+
+In the root `package.json`, the `"workspaces"` key is used to indicate which subdirectories should be considered packages/workspaces within the monorepo. It's conventional to place all the workspace in a directory called `packages`.
+
+```json
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "workspaces": ["packages/*"],
+  "devDependencies": {
+    "example-package-in-monorepo": "workspace:*"
+  }
+}
+```
+
+{% callout %}
+**Glob support** — Bun supports full glob syntax in `"workspaces"` (see [here](https://bun.sh/docs/api/glob#supported-glob-patterns) for a comprehensive list of supported syntax), _except_ for exclusions (e.g. `!**/excluded/**`), which are not implemented yet.
+{% /callout %}
+
+Each workspace has it's own `package.json`. When referencing other packages in the monorepo, semver or workspace protocols (e.g. `workspace:*`) can be used as the version field in your `package.json`.
+
+```json
+{
+  "name": "pkg-a",
+  "version": "1.0.0",
+  "dependencies": {
+    "pkg-b": "workspace:*"
+  }
+}
+```
+
+`bun install` will install dependencies for all workspaces in the monorepo, de-duplicating packages if possible. If you only want to install dependencies for specific workspaces, you can use the `--filter` flag.
+
+```bash
+# Install dependencies for all workspaces starting with `pkg-` except for `pkg-c`
+$ bun install --filter "pkg-*" --filter "!pkg-c"
+
+# Paths can also be used. This is equivalent to the command above.
+$ bun install --filter "./packages/pkg-*" --filter "!pkg-c" # or --filter "!./packages/pkg-c"
+```
+
+Workspaces have a couple major benefits.
+
+- **Code can be split into logical parts.** If one package relies on another, you can simply add it as a dependency in `package.json`. If package `b` depends on `a`, `bun install` will install your local `packages/a` directory into `node_modules` instead of downloading it from the npm registry.
+- **Dependencies can be de-duplicated.** If `a` and `b` share a common dependency, it will be _hoisted_ to the root `node_modules` directory. This reduces redundant disk usage and minimizes "dependency hell" issues associated with having multiple versions of a package installed simultaneously.
+- **Run scripts in multiple packages.** You can use the [`--filter` flag](https://bun.sh/docs/cli/filter) to easily run `package.json` scripts in multiple packages in your workspace.
+
+{% callout %}
+⚡️ **Speed** — Installs are fast, even for big monorepos. Bun installs the [Remix](https://github.com/remix-run/remix) monorepo in about `500ms` on Linux.
+
+- 28x faster than `npm install`
+- 12x faster than `yarn install` (v1)
+- 8x faster than `pnpm install`
+
+{% image src="https://user-images.githubusercontent.com/709451/212829600-77df9544-7c9f-4d8d-a984-b2cd0fd2aa52.png" /%}
+{% /callout %}
+
+================
+File: packages/docs/gemini/example.ts
+================
+import {
+    GoogleGenerativeAI,
+} from "@google/generative-ai";
+import { GoogleAIFileManager } from "@google/generative-ai/server";
+
+const apiKey = process.env.GEMINI_API_KEY as string;
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const fileManager = new GoogleAIFileManager(apiKey);
+  
+  /**
+   * Uploads the given file to Gemini.
+   *
+   * See https://ai.google.dev/gemini-api/docs/prompting_with_media
+   */
+  async function uploadToGemini(path, mimeType) {
+    const uploadResult = await fileManager.uploadFile(path, {
+  async function uploadToGemini(path: string, mimeType: string) {
+      displayName: path,
+    });
+    const file = uploadResult.file;
+    console.log(`Uploaded file ${file.displayName} as: ${file.name}`);
+    return file;
+  }
+  
+  /**
+   * Waits for the given files to be active.
+   *
+   * Some files uploaded to the Gemini API need to be processed before they can
+   * be used as prompt inputs. The status can be seen by querying the file's
+   * "state" field.
+   *
+   * This implementation uses a simple blocking polling loop. Production code
+   * should probably employ a more sophisticated approach.
+   */
+  async function waitForFilesActive(files) {
+    console.log("Waiting for file processing...");
+  async function waitForFilesActive(files: any[]) {
+      let file = await fileManager.getFile(name);
+    for (const name of files.map((file: any) => file.name)) {
+        process.stdout.write(".")
+        await new Promise((resolve) => setTimeout(resolve, 10_000));
+        file = await fileManager.getFile(name)
+      }
+      if (file.state !== "ACTIVE") {
+        throw Error(`File ${file.name} failed to process`);
+      }
+    }
+    console.log("...all files ready\n");
+  }
+  
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash-lite-preview-02-05",
+    tools: [
+      {
+        functionDeclarations: [
+          {
+            name: "get zsh script",
+            description: "given a task, output a shell script that implements it interactivly"
+          }
+        ]
+      }
+    ],
+    toolConfig: {functionCallingConfig: {mode: "ANY"}},
+  });
+  
+  const generationConfig = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
+    responseMimeType: "text/plain",
+  };
+  
+  async function run() {
+    // TODO Make these files available on the local file system
+    // You may need to update the file paths
+    const files = [
+      await uploadToGemini("shell.md", "text/markdown"),
+    ];
+  
+    // Some files have a processing delay. Wait for them to be ready.
+    await waitForFilesActive(files);
+  
+    const chatSession = model.startChat({
+      generationConfig,
+      history: [
+        {
+          role: "user",
+          parts: [
+            {
+              fileData: {
+                mimeType: files[0].mimeType,
+                fileUri: files[0].uri,
+              },
+            },
+          ],
+        },
+      ],
+    });
+  
+    const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
+    for(candidate of result.response.candidates) {
+      for(part of candidate.content.parts) {
+    for(const candidate of result.response.candidates) {
+      for(const part of candidate.content.parts) {
+          const args = Object
+            .keys(items)
+            .map((data) => [data, items[data]])
+            .map(([key, value]) => `${key}:${value}`)
+            .join(', ');
+          console.log(`${part.functionCall.name}(${args})`);
+        }
+      }
+    }
+  }
+  
+  run();
+
+================
+File: packages/docs/gemini/models.md
+================
+nidumai/nidum-llama-3.2-3b-uncensored
+brianmatzelle/llama3.1-8b-instruct-hasanpiker-abliterated
+
+================
+File: packages/docs/ronin/LanguageX.md
+================
+create a new programming langague called `Language X` that is close to pseudo code and has minimal boilerplate, python is a greate example, but don't use all of python's syntax, javascript is also a good example, but let's mix and match different syntrax to get the most easy language to write mixing all the good features of every one and avoid any of the extra stuff that comes with tradiational programming languages;
+the programming language will also implement types and for that we will use the typescript typing syntax;
+This langugae is designed for developers to make prompt engineering easier by using this programming language to prompt the chat model.
+Both the model and the user must agree on the language syntax for common and basic programming features, like looping, logging to the console.
+
+# Function declration
+
+```x
+// Function do not have a body, function declration are only written in the below syntax and should never include a body!
+// Function names must always start with a verb e.g `add` or `get` or `set` or `delete` etc... and must me camelCased
+func getRandomNumber () => $randomNumber: number // returns a random number
+func addTwoNumbers ($x: number, $y: number) => $sum: number // returns the sum of $x and $y
+```
+
+# Variables
+
+```x
+// Can be either delcared using const or let
+const sum: number = addTwoNumbers(2, 3) // $sum is equal to 5
+// But to reference a variable you have to use $ as a prfix:
+const newSum = addTwoNumbers($sum, 1) // $newSum is equal to 6
+```
+
+# Using functions from other programming language:
+
+```x
+// Built-functions of other language are supported as long they only deal with primitive values which are either strings, numbers or booleans.
+// It also supports arrays, but they have to be arrays of primitive values, e.g array of strings, numbers or booleans
+// To use the .sort() function from javascript:
+```
+
+```x
+const unsortedList = [3, 1, 1]
+const list = js:sort($unsortedList) // this clones $unsortedList into $list and then sorts $list
+// this is equivalnt to:
+func sort($list: array) => $sortedList: array // returns a sorted clone of $list
+// but the addition of `js:` implies that the default javascript sorting algorithm should be used to sort these elements and this will also be used by transpilers / interperters to generate code using javascript for this line
+```
+
+# Immutability
+
+In `Language X` all functions must return a value, it is a purely functional programming language where there is no concept of objects or oop, and as such it should be assumed that all functions imported from another language will not modify variables in place and will instead clone their arguments and create a new reference in memory
+
+```x
+// using different variants of the same function e.g `Array.sort()` and `Array.toSorted()` does not have any effect and the result is still the same, the only difference is the naming
+const list = js:toSorted([3, 2, 1])
+```
+
+# Some common functions
+
+```x
+// valid code
+const list = ['a', 'b', 'c']
+const listLength = py:len($list) // $listLength is equal to 3
+```
+
+```x
+// invalid code !
+const list = ['a', 'b', 'c']
+const listLength = list.length // error! LanguageX does not support any form dot notation or object access modifiers
+// You may however use indices to get elements of an array:
+const list = ['a', 'b', 'c']
+const firstElement = $list[0] // if list[0] is empty accessing elements this way will produce an error!
+```
+
+# Loops
+
+there is only one type of loop in `X` which is the for do loop:
+
+```x
+for $elem in $list
+    do `sh:echo $elem` // prints $elem to stdout
+```
+
+multiple do statement:
+
+```x
+for $elem in $list
+    do `const planet = 'earth'`
+    do `sh:echo $elem + $planet` // prints $elem + $plant (string aggregation)
+```
+
+With loop variable:
+
+```x
+const _ = py:range(0, 5)
+for $index in _
+    do `echo $index` // outputs 0, 1, 2, 3, 4
+```
+
+# AI
+
+A special syntax may be used to instruct llms to generate values dynamcilly to be used in the script.
+
+```x
+sh:echo({{ string: a random joke }}) // when an llm sees this it should substitute what's between the `{{` and the `}}` with the prompt inside it.
+// so an llm should read the above line as `sh:echo <a string of a random hoke>.
+```
+
+You may also assign varibles using this syntax:
+
+```x
+const randomHumanName = {{ string: random name of a human}};
+// in which case randomHumanName's value is generated by the llm and then put back into the source file.
+```
+
+# Asynchronous Programming
+
+async/await is not supported in `X`. To write asynchrounous code you can use the following syntax:
+
+```x
+func[4] fetchWeatherData($country: string) => <$weatherData: string[]> // fetches $weatherData from th server filtered by $country
+// the number 4` here indicates the max time a single network request should take. and a TIMEOUT error is thrown if the request didn't complete within 4 seconds of the request. This is handled internally by using the Promise.race() javascript function `js:race` ,`4` seconds is usually a very big timeout if you are just fetching json data from the server as it usually takes milliseconds to send/receive hunbders of enteries beteween client and server.
+when the return of a function is put between `<` and `>` this marks the variable as asynchronus and it resolves to a Response object.
+A docker proxy server running in the middle of the client and the server handles incoming requests from the client and responses from the server.
+actint as a controller, this proxy server also uses ssh keys to encrypy and decrypt data between server and client in secure way.
+The proxy server also handle convertion of `Response` objects coming from the server to JSON.parse({body of the response}).
+meaning it only extracts a plain javascript object (that can be represented in json) and sends it to the client. and does the reverse for the client. when the client sends a Request objects to the server, the proxy server also extracts a plain javascript object from the response that is usually the body of the request and forwards it to the main server.
+communication between the client - proxy server - main server is secured using ssh keys and digital signatures.
+but sometimes if you are uploading a file or an image the request may take longer in that case you can mark the function as infinite:
+func[∞] postImageFiles(files: string[]) => response: Response // Native `Response` inteface for both node and browser
+```
+
+````x
+//you can also use the string `infinity` instead.
+func[infinity] keepFetchingUntilServerTimesout() => <void>;
+
+
+# Await
+```x
+// the `use` operator is equivalnt to `await`, however it will validate the data against the async function's return type using zod schemas and if the type does not match a validation error will be thrown!
+const data = use fetchWeatherData('New Zealend')
+// At this point data is validated and awaited and the `data` variable is a list of string.
+for $elem in $data
+    do `sh:echo $elem` // outputs 23, 32, 23, etc..
+````
+
+# Database operations
+
+The `Database` in `LanguageX` is a key-value documents database stored as josn.
+There are TWO databased in `X`.
+The first one is the server based database and the second one is the client side database.
+And then there is a `shadow` database that can be used to store shared database key/values pairs.
+This `shadow` database is initialized on the server, populated with keys that the server wants to share with the client. On first client load; the `shadow` database is sent to the client as cookies. This is also a two-way data sharing mechanism; by making the server send extra shared keys with no value to the client, (like the server send the client a key called `userName` with no value), this allows the client to set the value by itself using a POST request to the server with the value for the key.
+The server then has control whether to sync that change on the server.
+Once the server has decieded what to do with the received data in the post request, it sends the user a hash of the value it received. This hash is generated by using the user's public ssh key to digitally sign the data.
+All POST requests from the client to the server must include a `userId` in the body of the request.
+The value of `userId` is treated as the public ssh key of the user and is used to digitally sign data sent from the server to the client.
+Respectivly, all responses from POST request include the `serverId` key/value pair in the response body. This `serverId` is treated as the server's public ssh key.
+The user uses client side authentication methods to generate both a private and a public ssh key.
+The user's private ssh key is generated by any authentication method preferabbable as long as it generated both a private and a publick ssh key.
+Once the private key is generated on the client, it is turned into a hash using the server's publick ssh key `serverId` which can be found by making a GET request to `/handshake/id` which returns the key as raw text.
+After the client users `serverId` to turn their private ssh key into a hash, they delete the private key from the client and send the generated hash to the server.
+The client then either asks the user for a `password` that will be used to encrypt the hash or use a JWT token or biometric authentication or single-sign-onn sso.
+
+```x
+// ! Example workflow:
+func[3.5] postData($data: string[], $url: string) => <$response:Response> e // The native Javascript V8 `Response` interface. or throws a timeout error after 3.5 seconds.
+
+```
+
+# Conditionals and optional chaining
+
+```x
+// You can use if statements in `X`
+const data = postData(['a', 'b', 'c'], "/test")
+// the `use` operator automacilly returns the validated response body data against zod schemas, which means you get intellisense if you have setup your zod schemas.
+// the `use` operator also 'await' the data
+const validatedData = use $data
+// you can now access properties on the validated data. however properties are stored as arrays and not obects!
+// for example:
+const someObject = {someProp: 'someValue'} // ! invalid
+instead data is validated and returned as a matrix.
+It mimics a sqllite structure tables;
+```
+
+# Database Structure
+
+Data in `X` is stored as a matrix (2D array). The first array contains the schema, and subsequent arrays contain the actual data.
+
+```x
+// Example database structure
+const db = [
+    // Schema definition
+    [
+        ["id", [
+            ["type", "number"],
+            ["@unique", true],
+            ["@id", true]
+        ]],
+        ["name", [
+            ["type", "string"],
+            ["@unique", true],
+            ["@id", false]
+        ]],
+        ["email", [
+            ["type", "string"],
+            ["@unique", true],
+            ["@id", false]
+        ]]
+    ],
+    // Data rows
+    [1, "John", "john@email.com"],
+    [2, "Alice", "alice@email.com"],
+    [3, "Bob", "bob@email.com"]
+]
+
+// Accessing data
+const firstRow = $db[1] // Returns [1, "John", "john@email.com"]
+const johnName = $db[1][1] // Returns "John"
+```
+
+This structure allows for type safety and schema validation while keeping the data format simple and efficient.
+
+# ORM
+
+`X` comes with its own ORM that can integrate with any database.
+`Prisma` or `lowdb` or `mainfest.js` or even just a local dev.db file with a sqlite3 database.
+
+## Usage:
+
+// generates code to interact with prisma
+// needs exporting of enviroment varibles to work correctly
+// you will need to setup a .env file with keys like:
+// = PRISMA_ROOT_FOLDER="./prisma
+// - PRISMA_SCHEMA_PATH="./prisma/prisma.schema.ts"
+// - ... and some more (check prisma docks)
+// the generated code uses `process.env[key]` to read enviroment varibles.
+// .env files are loaded by default and made accessible to prisma.
+const dataPromise = prisma[4]:getData() // max 4 seconds
+const data = use dataPromise // data fetched and validated
+
+# Other ORMs
+
+YOu can also other ORMs lke Drizzle... etc.
+you can also use either deno or bun for the runtime.
+you can use bun or deno special features together in the same app wiwthout having to switch or change anything. everhting is avalaible with zero config.
+
+## So you can run
+
+```x
+LanguageX does NOT use objects of any kind, but since array is actually an object in some language like javascript you can still emulate oop behavior, however that is very discourged and the prefered way is to use array string only.
+This format unifies server and client communication
+
+type Cat = [
+    [string, string], // schema row: column names
+    [string, string], // schema row: types
+    ...[string, number][] // data rows
+]
+```
+
+```x
+const catsPromise = bun:sql[20]('SELECT \* FROM cats')
+const cats : Cat[]= use catsPromise // now you have intellesense
+js:log(js:stringfy(cats))
+// outputs:
+[
+[["name", "age"],
+["string", "number"]],
+["Whiskers", 3],
+["Luna", 2],
+["Shadow", 4],
+["Milo", 1],
+["Bella", 5]
+]
+
+```
+
+# Proxy Server
+
+Communicatin between client and server are managed by the proxy server.
+the proxy server is a private server owned by you (can even be your own laptop) that sits between the server and the client.
+It has an admin panel that lets you configure and manage both client and server at the same time.
+
+and as such this server should be kept private and limits access to certain users only (can be a docker image as well) (you can deploy bun server or deno servers or vercel).
+
+the proxy server admin panel has the followig settings and methods: - toggle proxy server on/off - toggle demo mode on/off - switch themems - add CMS content - generate zod schemas script - validate script - setup request/response maps (or use trpc/grpc)
+
+The proxy server is a monorepo that has several packages: - endpoints - generate - validate - generatedData - index.ts
+It uses nx monorepo under the hood.
+
+## endpoints
+
+type defiintions and configuration of api endpoints, this is required if you are going to use the proxy server.
+for each url or 'endpoint' in your api you should add an endpoint object that has the type `AppEndpoint` exported by the `endpoints` package.
+`AppEndpoint` consists of many properties, as an example:
+
+const testEndpoint = [
+// Schema definition
+["url", "/api/test"],
+["method", "POST"],
+["requestSchema", [
+["status", "string"],
+["message", "string"]
+]],
+["responseSchema", [
+["success", "boolean"],
+["data", "string[]"]
+]],
+["exampleRequest", [
+"ok",
+"test message"
+]],
+["exampleResponse", [
+true,
+["data1", "data2"]
+]]
+]
+const testEndpoint = [
+["url", "requestSchema", "exampleRequestBody"],
+["string', "ZodTypeAny", "z.infer<typeof requestSchema>]],
+["/ap/test", "[["status"], ["string"], ['ok]]", [['status"], "string",], ["ok]]
+
+## generate
+
+this scrirpt calls all endpoints defined in the `endpoints` package using the `exampleRequestBody` and a post request.
+It then stores the response in an example-{endpoint}-{operation}.json file.
+using the json file and a library called `json-to-zod` it generated zod schemas based on the response of each endpoint.
+then it copies the fetched json file to the root of the package `generatedData`'s `responseSchemas` folder.
+the command sets up all schemas with import/export statement and uses the name defined in your `endpoints` package to generate the zod schema names.
+
+Cross-origin-policy is restriected both on the client and the server and the proxy so only allowed domain on all three components of the app have the same cross-origin-policy the proxy server will be disabled and you will have to setup a backend yourself (maybe vercel)
+
+once the resposneSchemas are genereated. you have to manually edit the root inde.ts file of the proxy server to export the newly generated endpoint.
+
+# Server Actions with Next.js
+
+For Next.js v15 with server actions, there is a global helper function:
+
+```x
+// Helper function for form actions
+func getFormAction($endpoint: URL, $method: string) => $action: FormFunction
+// where method is one of: "list" | "details" | "create" | "delete" | "update"
+// returns a function that handles form data submission
+
+// Example usage:
+const submitHandler = getFormAction("/api/users", "create")
+```
+
+The returned action function handles:
+
+- Form data validation
+- Request/response type safety
+- Error handling
+- Loading states
+
+Usage in Next.js components:
+
+```x
+// In a Next.js component
+const form = getFormAction("/api/posts", "create")
+do `<form action={$form}>
+    <input name="title" />
+    <button type="submit">Create</button>
+</form>`
+//If you want to use Next.js v15 with server actions you have a helper function that is globally defined but here it is anyways:
+func getFormAction(endpoint: URL, method: "list" | "details" | "create" | "delete" | update ) => (formData: FormData) => {}
+```
+
+# How does mixing programming languages work?
+
+in LanguageX you can import and use function from different programming language like rust, javascript and python.
+how does that work?
+well, the proxy server has access to a sandboxes docker container that has most programming language installed including ruby!
+then when the interpeter encouters a line like:
+
+```x
+js:log('hello workd')
+```
+
+it runs a `docker exec` command to execute the javascript code using the node installation in the container.
+sample command to run the above code inside the container will look like:
+
+```sh
+docker exec lang-x-container node -e "console.log('hello world')"
+```
+
+and it does the same for all languages, piping your input into the native function of the programming language and then extracting the output to the global frame.
+
+# Userful Functions
+
+## getFormAction() => (formData: FormData) => [["id", "name"],["number", "string"]]
+
+Used to handle form submissions in Next.js server actions:
+
+```x
+// Create form handler
+const submitHandler = getFormAction("/api/users", "create")
+
+// Handles:
+- Form validation
+- Type safety
+- Error states  
+- Loading states
+```
+
+Example usage:
+
+```x
+// In Next.js component
+const form = getFormAction("/api/posts", "create") 
+do `<form action={$form}>
+    <input name="title" />
+    <button>Submit</button>
+</form>`
+```
+
+## getFormAction() => (formData: FormData) => [["id", "name"],["number", "string] ]
+
+Check `packages/actions/server/getFormAction.ts`
+
+================
+File: packages/docs/package.json
+================
+{
+  "name": "@ronin/docs",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/config": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+    
+  }
+}
+
+================
+File: packages/hooks/package.json
+================
+{
+  "name": "@ronin/hooks",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/config": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}
+
+================
+File: packages/hooks/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/hooks/useFormAction.ts
+================
+import { allEndpoints } from "@monshaat/portal-api";
+import { z } from "zod";
+import { post, PostResponse } from "./post";
+
+
+export type Endpoint = keyof typeof allEndpoints;
+export type Operation = "list" | "details" | "create";
+export const getFormAction = (endpoint: Endpoint, operation: Operation) => {
+  // const { details, list, create } = allEndpoints[endpoint];
+  const { details, list } = allEndpoints[endpoint];
+  const {
+    requestSchema: detailsRequestSchema,
+    responseSchema: detailsResponseSchema,
+    url: detailsURl,
+  } = details;
+  const {
+    requestSchema: listRequestSchema,
+    responseSchema: listResponseSchema,
+    url: listUrl,
+  } = list;
+
+  let requestSchema: typeof detailsRequestSchema | typeof listRequestSchema;
+  let responseSchema: typeof detailsResponseSchema | typeof listResponseSchema;
+  let url: string;
+
+  switch (operation) {
+    case "details":
+      url = detailsURl;
+      requestSchema = detailsRequestSchema;
+      responseSchema = detailsResponseSchema;
+      break;
+    case "list":
+      url = listUrl;
+      requestSchema = listRequestSchema;
+      responseSchema = listResponseSchema;
+      break;
+    default:
+      throw new Error("requestSchemaInvalid operation");
+  }
+
+  type RequestBody = z.infer<typeof requestSchema>;
+  type ResponseBody = z.infer<typeof responseSchema>;
+
+  const validateRequestBody = (body: unknown): RequestBody => {
+    const validatedBody = requestSchema.parse(body);
+    return validatedBody;
+  };
+
+  const vaidateResponseBody = (body: unknown): ResponseBody => {
+    const validatedBody = responseSchema.parse(body);
+    return validatedBody;
+  };
+
+  const postFunction = async (body: RequestBody) => {
+    const response = await post({
+      url,
+      body,
+    });
+    return response;
+  };
+
+  type FormActionReturn = {
+    data: ResponseBody | null;
+    metaData: PostResponse | null;
+    error: string | null;
+    operation: string;
+    endpoint: string;
+    validationError: string | null;
+  };
+
+  const formAction = async (formData: FormData): Promise<FormActionReturn> => {
+    const body = Object.fromEntries(formData);
+
+    const formActionReturn: FormActionReturn = {
+      endpoint,
+      operation,
+      data: null,
+      error: null,
+      validationError: null,
+      metaData: null,
+    };
+
+    let metaData: PostResponse | null = null;
+    let validResponseBody: ResponseBody;
+    let validRequestBody: RequestBody;
+
+    try {
+      let id: number | string = body.id?.toString();
+      let employee_id: number | string = body.employee_id?.toString();
+
+      if (id) {
+        id = parseInt(id);
+      }
+
+      if (employee_id) {
+        employee_id = parseInt(employee_id);
+      }
+
+      validRequestBody = validateRequestBody({ ...body, id, employee_id });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e: unknown) {
+      formActionReturn.error = "Error in validateRequestBody";
+      formActionReturn.validationError =
+        e instanceof Error ? e.message : "Error in vaidateResponseBody";
+      return formActionReturn;
+    }
+
+    try {
+      metaData = await postFunction(validRequestBody);
+      formActionReturn.metaData = metaData;
+      const postFunctionError = metaData?.response.error;
+      if (postFunctionError) {
+        formActionReturn.error = postFunctionError;
+        return formActionReturn;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e: unknown) {
+      formActionReturn.error = "Errorin postFunction";
+      formActionReturn.validationError =
+        e instanceof Error ? e.message : "Error in vaidateResponseBody";
+      return formActionReturn;
+    }
+
+    try {
+      const { response } = metaData;
+      const { responseJson } = response;
+      validResponseBody = vaidateResponseBody(responseJson);
+      formActionReturn.data = validResponseBody;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e: unknown) {
+      formActionReturn.error = metaData.response.error;
+      formActionReturn.validationError =
+        e instanceof Error ? e.message : "Error in vaidateResponseBody";
+      return formActionReturn;
+    }
+    return formActionReturn;
+  };
+
+  return formAction;
+};
+
+================
+File: packages/prompts/getPlanPrompt.ts
+================
+export const getPlanPrompt = (task: string) => {
+  const prompt = `Given this task: "${task}", provide a list of steps to achieve it, reply only using the following json format: 
+        {
+                "task": "main task description",
+                "taskName": "uniqueTaskIdentifier",
+                "howToTest": "how to test the main task",
+                "command": "command to execute task && command to test it || echo 'Test failed: main task'",
+                "steps": [
+                        {
+                                "task": "step description",
+                                "taskName": "uniqueStepIdentifier",
+                                "dependsOn": ["taskNameThatNeedsToBeCompletedFirst"],
+                                "howToTest": "how to test this step",
+                                "command": "command to execute step && command to test it || echo 'Test failed: step description'",
+                                "steps": [] // nested steps follow the same structure
+                        }
+                ]
+        }`;
+
+  return prompt;
+};
+
+================
+File: packages/prompts/getSplitTaskPrompt.ts
+================
+// parent: number, // parent task name
+// add depends on [...tasks].
+// const returnSchema = `{
+//     name: string, // name of the task
+//     description: string, // description of the task
+//     usefulLinks: string[], // links to resources that can help with the task
+// }`;
+
+// const SPLIT_TASK_PROMPT = `Divide task into two subtasks unless the task is too simple to divide further, only reply with a json array of the following object schema: ${returnSchema}, `;
+export const getSubTasksPrompt = (task: string) =>
+  `Divide the following function into multiple functions only if necessary, if the function is simple enough to be implemeneted without being split into smaller functions return the same function: ${task}`;
+
+================
+File: packages/prompts/package.json
+================
+{
+  "name": "@ronin/prompts",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/config": "workspace:*",
+    "bun-types": "latest",
+    "zod": "1"
+  }
+}
+
+================
+File: packages/prompts/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/scripts/coder.ts
+================
+import { SchemaType } from "@google/generative-ai";
+import { getAiResponse } from "./getAiResponse";
+import { getSubTasksPrompt } from "./prompts/getSplitTaskPrompt";
+import { sleep } from "./sleep";
+import { z } from "zod";
+import { write } from "bun";
+
+// Define a zod schema for each task.
+const zodSchema = z.object({
+  isBasicTask: z.boolean(),
+  description: z.string(),
+  name: z.string(),
+  pseudocode: z.string(),
+});
+
+// Define the expected JSON schema for the API response.
+const schema = {
+  description: "List of sub tasks",
+  type: SchemaType.ARRAY,
+  items: {
+    type: SchemaType.OBJECT,
+    properties: {
+      name: {
+        type: SchemaType.STRING,
+        description: "Name of the sub task",
+        nullable: false,
+      },
+      description: {
+        type: SchemaType.STRING,
+        description: "Description of the sub task",
+        nullable: false,
+      },
+      isBasicTask: {
+        type: SchemaType.BOOLEAN,
+        description:
+          "Whether the task is simple enough to not be divided further. If so, this should be true.",
+        nullable: false,
+      },
+      pseudocode: {
+        type: SchemaType.STRING,
+        description: "Pseudo code for the task",
+        nullable: false,
+      },
+    },
+    required: ["name", "description", "isBasicTask", "pseudocode"],
+  },
+};
+
+// This function sends the task to the AI and returns a JSON string representing an array of sub tasks.
+export const splitTask = async (task: string): Promise<string> => {
+  const prompt = getSubTasksPrompt(task);
+  const tasks = await getAiResponse({
+    task,
+    prompt,
+    responseMimeType: "application/json",
+    responseSchema: schema,
+  });
+  return tasks;
+};
+
+// Define the basic task type returned by splitTask.
+export type TaskResult = {
+  name: string;
+  description: string;
+  isBasicTask: boolean;
+};
+
+// Define the tree node type.
+export type TaskNode = {
+  task: TaskResult;
+  subTasks: TaskNode[];
+};
+
+// Global constant for maximum recursive depth.
+const MAX_RECURSIVE_DEPTH = 10;
+
+/**
+ * Recursively builds a tree branch for a given task.
+ *
+ * @param task - The current task to process.
+ * @param currentDepth - The current depth in the recursion.
+ * @returns A TaskNode representing the task and its (possibly recursive) subtasks.
+ */
+const buildSubTree = async (
+  task: TaskResult,
+  currentDepth: number
+): Promise<TaskNode> => {
+  // Stop recursion if the task is basic or we've reached the maximum depth.
+  if (task.isBasicTask || currentDepth >= MAX_RECURSIVE_DEPTH) {
+    return { task, subTasks: [] };
+  }
+
+  // Call splitTask to get the subtasks.
+  const responseString = await splitTask(task.description);
+  let subTaskResults: TaskResult[] = JSON.parse(responseString).map(
+    (item: any) => zodSchema.parse(item)
+  );
+
+  // Limit to at most 2 subtasks.
+  subTaskResults = subTaskResults.slice(0, 2);
+
+  // Recursively process each subtask.
+  const children: TaskNode[] = [];
+  for (const subTask of subTaskResults) {
+    const childNode = await buildSubTree(subTask, currentDepth + 1);
+    children.push(childNode);
+  }
+
+  return { task, subTasks: children };
+};
+
+/**
+ * Builds the complete task tree starting from an initial task string.
+ *
+ * The root node is created from the initial string, then splitTask is called
+ * to generate the first level of subtasks.
+ *
+ * @param initialTask - The initial task as a string.
+ * @returns A TaskNode representing the full tree.
+ */
+export const buildTaskTree = async (initialTask: string): Promise<TaskNode> => {
+  // Create a root TaskResult from the input string.
+  const rootTask: TaskResult = {
+    name: initialTask,
+    description: initialTask,
+    isBasicTask: false,
+  };
+
+  // Split the root task into subtasks.
+  const responseString = await splitTask(initialTask);
+  let subTaskResults: TaskResult[] = JSON.parse(responseString).map(
+    (item: any) => zodSchema.parse(item)
+  );
+
+  // Limit to at most 2 subtasks.
+  subTaskResults = subTaskResults.slice(0, 2);
+
+  // Build the children recursively.
+  const children: TaskNode[] = [];
+  for (const subTask of subTaskResults) {
+    const childNode = await buildSubTree(subTask, 1);
+    children.push(childNode);
+  }
+
+  return { task: rootTask, subTasks: children };
+};
+
+// Ujge example:
+const MAIN_TASK = "make a cup of tea";
+
+const taskTree = await buildTaskTree(MAIN_TASK);
+console.dir({ taskTree });
+const taskTreeFilePath =
+  "./taskTrees/" + Date.now() + MAIN_TASK.replaceAll(" ", "_") + ".json";
+write(taskTreeFilePath, JSON.stringify(taskTree));
+console.log(taskTreeFilePath);
+
+================
+File: packages/scripts/package.json
+================
+{
+  "name": "@ronin/scripts",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "bun-types": "latest",
+    "zod": "3",
+    "@ronin/actions": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "@ronin/utils": "workspace:*"
+  }
+}
+
+================
+File: packages/scripts/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/test/server/actions/testExecuteCommand.ts
+================
+import { executeCommand } from "../../../actions/server/executeCommand";
+
+const command = "echo Hello, world!";
+const output = await executeCommand(command);
+console.log(output); // Hello, world!
+
+================
+File: packages/test/server/actions/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/test/package.json
+================
+{
+  "name": "@ronin/test",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@ronin/actions": "workspace:*",
+    "bun-types": "latest",
+    "zod": "3"
+  }
+}
+
+================
+File: packages/test/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: packages/utils/package.json
+================
+{
+  "name": "@ronin/utils",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "bun-types": "latest",
+    "zod": "3",
+    "@ronin/actions": "workspace:*",
+    "@ronin/prompts": "workspace:*",
+    "@ronin/utils": "workspace:*"
+  }
+}
+
+================
+File: packages/utils/sleep.ts
+================
+export const sleep = (s: number) => new Promise((resolve) => setTimeout(resolve, s * 1000));
+
+================
+File: packages/utils/tsconfig.json
+================
+{
+    "compilerOptions": {
+      "lib": [
+        "ESNext"
+      ],
+      "module": "esnext",
+      "target": "esnext",
+      "moduleResolution": "esnext",
+      "strict": true,
+      "downlevelIteration": true,
+      "skipLibCheck": true,
+      "jsx": "preserve",
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowJs": true,
+      "types": [
+        "bun-types" // add Bun global
+      ]
+    }
+  }
+
+================
+File: .gitignore
+================
+# Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
+
+# Logs
+
+logs
+_.log
+npm-debug.log_
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Caches
+
+.cache
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# Runtime data
+
+pids
+_.pid
+_.seed
+*.pid.lock
+
+# Directory for instrumented libs generated by jscoverage/JSCover
+
+lib-cov
+
+# Coverage directory used by tools like istanbul
+
+coverage
+*.lcov
+
+# nyc test coverage
+
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+
+bower_components
+
+# node-waf configuration
+
+.lock-wscript
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+
+build/Release
+
+# Dependency directories
+
+node_modules/
+jspm_packages/
+
+# Snowpack dependency directory (https://snowpack.dev/)
+
+web_modules/
+
+# TypeScript cache
+
+*.tsbuildinfo
+
+# Optional npm cache directory
+
+.npm
+
+# Optional eslint cache
+
+.eslintcache
+
+# Optional stylelint cache
+
+.stylelintcache
+
+# Microbundle cache
+
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+
+.node_repl_history
+
+# Output of 'npm pack'
+
+*.tgz
+
+# Yarn Integrity file
+
+.yarn-integrity
+
+# dotenv environment variable files
+
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# parcel-bundler cache (https://parceljs.org/)
+
+.parcel-cache
+
+# Next.js build output
+
+.next
+out
+
+# Nuxt.js build / generate output
+
+.nuxt
+dist
+
+# Gatsby files
+
+# Comment in the public line in if your project uses Gatsby and not Next.js
+
+# https://nextjs.org/blog/next-9-1#public-directory-support
+
+# public
+
+# vuepress build output
+
+.vuepress/dist
+
+# vuepress v2.x temp and cache directory
+
+.temp
+
+# Docusaurus cache and generated files
+
+.docusaurus
+
+# Serverless directories
+
+.serverless/
+
+# FuseBox cache
+
+.fusebox/
+
+# DynamoDB Local files
+
+.dynamodb/
+
+# TernJS port file
+
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+
+.vscode-test
+
+# yarn v2
+
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store
+
+================
+File: bun.lock
+================
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "ronin",
+    },
+    "packages/actions": {
+      "name": "@ronin/actions",
+      "version": "0.0.1",
+      "dependencies": {
+        "@google/generative-ai": "^0.21.0",
+        "@ronin/config": "workspace:*",
+        "@ronin/prompts": "workspace:*",
+        "bun-types": "latest",
+        "zod": "1",
+      },
+    },
+    "packages/archieve": {
+      "name": "@ronin/archieve",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/config": "workspace:*",
+        "@ronin/prompts": "workspace:*",
+        "bun-types": "latest",
+        "zod": "1",
+      },
+    },
+    "packages/config": {
+      "name": "@ronin/config",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/prompts": "workspace:*",
+        "bun-types": "latest",
+        "zod": "1",
+      },
+    },
+    "packages/hooks": {
+      "name": "@ronin/hooks",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/config": "workspace:*",
+        "@ronin/prompts": "workspace:*",
+        "bun-types": "latest",
+        "zod": "1",
+      },
+    },
+    "packages/prompts": {
+      "name": "@ronin/prompts",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/config": "workspace:*",
+        "bun-types": "latest",
+        "zod": "1",
+      },
+    },
+    "packages/scripts": {
+      "name": "@ronin/scripts",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/actions": "workspace:*",
+        "@ronin/prompts": "workspace:*",
+        "@ronin/utils": "workspace:*",
+        "bun-types": "latest",
+        "zod": "3",
+      },
+    },
+    "packages/test": {
+      "name": "@ronin/test",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/actions": "workspace:*",
+        "bun-types": "latest",
+        "zod": "3",
+      },
+    },
+    "packages/utils": {
+      "name": "@ronin/utils",
+      "version": "0.0.1",
+      "dependencies": {
+        "@ronin/actions": "workspace:*",
+        "@ronin/prompts": "workspace:*",
+        "@ronin/utils": "workspace:*",
+        "bun-types": "latest",
+        "zod": "3",
+      },
+    },
+  },
+  "packages": {
+    "@google/generative-ai": ["@google/generative-ai@0.21.0", "", {}, "sha512-7XhUbtnlkSEZK15kN3t+tzIMxsbKm/dSkKBFalj+20NvPKe1kBY7mR2P7vuijEn+f06z5+A8bVGKO0v39cr6Wg=="],
+
+    "@ronin/actions": ["@ronin/actions@workspace:packages/actions"],
+
+    "@ronin/archieve": ["@ronin/archieve@workspace:packages/archieve"],
+
+    "@ronin/config": ["@ronin/config@workspace:packages/config"],
+
+    "@ronin/hooks": ["@ronin/hooks@workspace:packages/hooks"],
+
+    "@ronin/prompts": ["@ronin/prompts@workspace:packages/prompts"],
+
+    "@ronin/scripts": ["@ronin/scripts@workspace:packages/scripts"],
+
+    "@ronin/test": ["@ronin/test@workspace:packages/test"],
+
+    "@ronin/utils": ["@ronin/utils@workspace:packages/utils"],
+
+    "@types/node": ["@types/node@22.13.4", "", { "dependencies": { "undici-types": "~6.20.0" } }, "sha512-ywP2X0DYtX3y08eFVx5fNIw7/uIv8hYUKgXoK8oayJlLnKcRfEYCxWMVE1XagUdVtCJlZT1AU4LXEABW+L1Peg=="],
+
+    "@types/ws": ["@types/ws@8.5.14", "", { "dependencies": { "@types/node": "*" } }, "sha512-bd/YFLW+URhBzMXurx7lWByOu+xzU9+kb3RboOteXYDfW+tr+JZa99OyNmPINEGB/ahzKrEuc8rcv4gnpJmxTw=="],
+
+    "bun-types": ["bun-types@1.2.2", "", { "dependencies": { "@types/node": "*", "@types/ws": "~8.5.10" } }, "sha512-RCbMH5elr9gjgDGDhkTTugA21XtJAy/9jkKe/G3WR2q17VPGhcquf9Sir6uay9iW+7P/BV0CAHA1XlHXMAVKHg=="],
+
+    "undici-types": ["undici-types@6.20.0", "", {}, "sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg=="],
+
+    "zod": ["zod@1.11.17", "", {}, "sha512-UzIwO92D0dSFwIRyyqAfRXICITLjF0IP8tRbEK/un7adirMssWZx8xF/1hZNE7t61knWZ+lhEuUvxlu2MO8qqA=="],
+
+    "@ronin/scripts/zod": ["zod@3.24.2", "", {}, "sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ=="],
+
+    "@ronin/test/zod": ["zod@3.24.2", "", {}, "sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ=="],
+
+    "@ronin/utils/zod": ["zod@3.24.2", "", {}, "sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ=="],
+  }
+}
+
+================
+File: index.ts
+================
+// // import read from "node-read";
+// import { file, write } from "bun";
+// import { input } from "@inquirer/prompts";
+// import { getAiResponse } from "./getAiResponse";
+
+// // const TurndownService = require("turndown");
+// // const turndownService = new TurndownService();
+// // const url = "https://wiki.archlinux.org/title/Installation_guide";
+
+// // const fetchResponse = await fetch(url);
+// // const html = await fetchResponse.text();
+// // const markdown = turndownService.turndown(html);
+// // const path = "arch_linux_installation_guide.md";
+// // const mdFile = file("data/" + path);
+// // await write(mdFile, markdown);
+
+// const userPrompt = await input({ message: ">>>" });
+
+// const googleSearchPage = await getAiResponse(
+//   "reply with a google search url for the following prompt, don't use the prompt as-is, modify it so that the google search is more relevent to the user's question,only reply with the url and nothing else!:",
+//   userPrompt
+// );
+// console.log({ googleSearchPage });
+
+// // const googleSearchResults = await fetch(googleSearchPage, {
+// //   redirect: "manual",
+// //   method: "GET",
+// //   headers: {
+// //     "Content-Type": "text/html",
+// //     "User-Agent":
+// //       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+// //   },
+// // });
+
+// // const googleSearchHtml = await googleSearchResults.text();
+// // const googleSearchPath = "google_search_results.html";
+// // const googleSearchMdFile = file("data/" + googleSearchPath);
+// // await write(googleSearchMdFile, googleSearchHtml);
+// // const googleSearchMarkdown = turndownService.turndown(googleSearchHtml);
+// // const googleSearchMdFile = file("data/" + googleSearchPath);
+// // await write(googleSearchMdFile, googleSearchMarkdown);
+
+// console.log({ googleSearchPage });
+// // const aiResponse = await getAiResponse(userPrompt, markdown);
+// // console.log(aiResponse);
+
+// // console.log(markdown);
+// // console.log(markdown);
+// // type Article = {
+// //   title: string;
+// //   content: string;
+// //   html: string;
+// //   dom: string;
+// // };
+
+// // read(url, function (err: Error, article: Article, res: Response) {
+// // const { title, content } = article;
+// // Main Article.
+// // console.log(article.content);
+// // const markdown = turndownService.turndown(article.html);
+// // const path = title.trim().replaceAll(" ", "_").toLowerCase() + ".md";
+// // const mdFile = file(path);
+// // write("data/" + mdFile, markdown);
+// // console.log(markdown);
+
+// // Title
+// // console.log(article.title);
+
+// // HTML
+// // console.log(article.html);
+
+// // DOM
+// // console.log(article.dom);
+// // });
+
+================
+File: package.json
+================
+{
+  "name": "ronin",
+  "private": "true",
+  "module": "index.ts",
+  "type": "module",
+  "workspaces": [
+    "packages/actions",
+    "packages/archieve",
+    "packages/config",
+    "packages/hooks",
+    "packages/utils",
+    "packages/scripts",
+    "packages/test",
+    "packages/prompts"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules packages/a/node_modules packages/b/node_modules bun.lockb packages/a/bun.lockb packages/b/bun.lockb"
+  }
+}
+
+================
+File: README.md
+================
+[LanguageX](packages/docs/ronin/LanguageX.md)
+
+================
+File: tsconfig.json
+================
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "nodenext",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "types": [
+      "bun-types" // add Bun global
+    ]
+  }
+}
+
+
+
+================================================================
+End of Codebase
+================================================================
