@@ -15,8 +15,8 @@ func addTwoNumbers ($x: number, $y: number) => $sum: number // returns the sum o
 # Variables
 
 ```x
-// Can be either delcared using const or let
-const sum: number = addTwoNumbers(2, 3) // $sum is equal to 5
+// delcared using the car keyword
+var sum: number = addTwoNumbers(2, 3) // $sum is equal to 5
 // But to reference a variable you have to use $ as a prfix:
 const newSum = addTwoNumbers($sum, 1) // $newSum is equal to 6
 ```
