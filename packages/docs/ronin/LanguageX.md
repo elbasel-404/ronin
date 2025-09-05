@@ -4,45 +4,56 @@ This langugae is designed for developers to make prompt engineering easier by us
 Both the model and the user must agree on the language syntax for common and basic programming features, like looping, logging to the console.
 
 # Function declration
+Function do not have a body, function declration are only written in the below syntax and should never include a body!
+
+Function names must always start with a verb e.g `add` or `get` or `set` or `delete` etc... and must me camelCased
 
 ```x
-// Function do not have a body, function declration are only written in the below syntax and should never include a body!
-// Function names must always start with a verb e.g `add` or `get` or `set` or `delete` etc... and must me camelCased
 func getRandomNumber () => $randomNumber: number // returns a random number
 func addTwoNumbers ($x: number, $y: number) => $sum: number // returns the sum of $x and $y
 ```
 
 # Variables
+Declared using the var keyword:
 
 ```x
-// delcared using the car keyword
 var sum: number = addTwoNumbers(2, 3) // $sum is equal to 5
-// But to reference a variable you have to use $ as a prfix:
-const newSum = addTwoNumbers($sum, 1) // $newSum is equal to 6
+
 ```
+
+But to reference a variable you have to use $ as a prfix:
+
+```
+var newSum = addTwoNumbers($sum, 1) // $newSum is equal to 6
+``|
 
 # Using functions from other programming language:
+Built-functions of other language are supported as long they only deal with primitive values which are either strings, numbers or booleans.
 
-```x
-// Built-functions of other language are supported as long they only deal with primitive values which are either strings, numbers or booleans.
-// It also supports arrays, but they have to be arrays of primitive values, e.g array of strings, numbers or booleans
-// To use the .sort() function from javascript:
-```
+It also supports arrays, but they have to be arrays of primitive values, e.g array of strings, numbers or booleans.
+
+To use the .sort() function from javascript:
 
 ```x
 var unsortedList = [3, 1, 1]
 var list = js:sort($unsortedList) // this clones $unsortedList into $list and then sorts $list
-// this is equivalnt to:
-func sort($list: array) => $sortedList: array // returns a sorted clone of $list
-// but the addition of `js:` implies that the default javascript sorting algorithm should be used to sort these elements and this will also be used by transpilers / interperters to generate code using javascript for this line
 ```
+
+This is equivalnt to:
+
+```x
+func sort($list: array) => $sortedList: array // returns a sorted clone of $list
+```
+
+But the addition of `js:` implies that the default javascript sorting algorithm should be used to sort these elements and this will also be used by transpilers / interperters to generate code using javascript for this line
 
 # Immutability
 
 In `Language X` all functions must return a value, it is a purely functional programming language where there is no concept of objects or oop, and as such it should be assumed that all functions imported from another language will not modify variables in place and will instead clone their arguments and create a new reference in memory
 
+Using different variants of the same function e.g `Array.sort()` and `Array.toSorted()` does not have any effect and the result is still the same, the only difference is the naming
+
 ```x
-// using different variants of the same function e.g `Array.sort()` and `Array.toSorted()` does not have any effect and the result is still the same, the only difference is the naming
 var list = js:toSorted([3, 2, 1])
 ```
 
@@ -57,11 +68,29 @@ var listLength = py:len($list) // $listLength is equal to 3
 ```x
 // invalid code !
 var list = ['a', 'b', 'c']
-var listLength = list.length // error! LanguageX does not support any form of dot notation or object access modifiers
-// You may however use indices to get elements of an array:
-var list = ['a', 'b', 'c']
-var firstElement = $list[0] // if list[0] is empty accessing elements this way will produce an error!
+var listLength = list.length // error! 
+
 ```
+
+LanguageX does not support any form of dot notation or object access modifiers
+// You may however use indices to get elements of an array:
+```
+var list = ['a', 'b', 'c']
+var firstElement = $list[0] // if list[0] is empty will produce an error
+```
+
+# Error Handling 
+To handle possible errors wrap code in `{` and `}`:
+
+```
+var list = ['a', 'b', 'c']
+===
+var firstElement = $list[0]
+===
+```
+
+This automatically handles any errors, however no access to the actual error is provided, this is to keep the terse nature of the language 
+
 
 # Loops
 
@@ -91,16 +120,18 @@ for $index in _
 A special syntax may be used to instruct llms to generate values dynamcilly to be used in the script.
 
 ```x
-sh:echo({{ string: a random joke }}) // when an llm sees this it should substitute what's between the `{{` and the `}}` with the prompt inside it.
-// so an llm should read the above line as `sh:echo <a string of a random joke>.
+sh:echo({{ string: a random joke }}) 
 ```
+when an llm sees this it should substitute what's between the `{{` and the `}}` with the prompt inside it.
+// so an llm should read the above line as `sh:echo <a string of a random joke>.
 
 You may also assign varibles using this syntax:
 
 ```x
 var randomHumanName = {{ string: random name of a human}};
-// in which case randomHumanName's value is generated by the llm and then put back into the source file.
 ```
+
+// in which case randomHumanName's value is generated by the llm and saved in the llm's memory
 
 # Asynchronous Programming
 
@@ -108,47 +139,75 @@ async/await is not supported in `X`. To write asynchrounous code you can use the
 
 ```x
 func[4] fetchWeatherData($country: string) => <$weatherData: string[]> // fetches $weatherData from th server filtered by $country
-// the number 4` here indicates the max time a single network request should take. and a TIMEOUT error is thrown if the request didn't complete within 4 seconds of the request. This is handled internally by using the Promise.race() javascript function `js:race` ,`4` seconds is usually a very big timeout if you are just fetching json data from the server as it usually takes milliseconds to send/receive hunbders of enteries beteween client and server.
+```
+The number 4` here indicates the max time a single network request should take. and a TIMEOUT error is thrown if the request didn't complete within 4 seconds of the request.
+
+ This is handled internally by using the Promise.race() javascript function `js:race` ,`4` seconds is usually a very big timeout if you are just fetching json data from the server as it usually takes milliseconds to send/receive hunders of enteries beteween client and server.
+
 when the return of a function is put between `<` and `>` this marks the variable as asynchronus and it resolves to a Response object.
+
 A docker proxy server running in the middle of the client and the server handles incoming requests from the client and responses from the server.
-actint as a controller, this proxy server also uses ssh keys to encrypy and decrypt data between server and client in secure way.
+
+Actinting as a controller, this proxy server also uses ssh keys to encrypy and decrypt data between server and client in secure way.
+
 The proxy server also handle convertion of `Response` objects coming from the server to JSON.parse({body of the response}).
+
 meaning it only extracts a plain javascript object (that can be represented in json) and sends it to the client. and does the reverse for the client. when the client sends a Request objects to the server, the proxy server also extracts a plain javascript object from the response that is usually the body of the request and forwards it to the main server.
+
 communication between the client - proxy server - main server is secured using ssh keys and digital signatures.
-but sometimes if you are uploading a file or an image the request may take longer in that case you can mark the function as infinite:
-func[∞] postImageFiles(files: string[]) => response: Response // Native `Response` inteface for both node and browser
+
+but sometimes if you are uploading a file or an image the request may take longer in that case you can mark the function as infinite
+
+```x
+func[*] postImageFiles(files: string[]) => response: Response // Native `Response` inteface for both node and browser
 ```
 
-````x
-//you can also use the string `infinity` instead.
-func[infinity] keepFetchingUntilServerTimesout() => <void>;
+Only sending/receiving primitive types and arrays of primitive types is supported.
 
-
-# Await
-```x
 // the `use` operator is equivalnt to `await`, however it will validate the data against the async function's return type using zod schemas and if the type does not match a validation error will be thrown!
+
+```x
 const data = use fetchWeatherData('New Zealend')
-// At this point data is validated and awaited and the `data` variable is a list of string.
+````
+
+At this point data is validated and awaited and the `data` variable is a list of string.
+
+```x
 for $elem in $data
     do `sh:echo $elem` // outputs 23, 32, 23, etc..
-````
+```
 
 # Database operations
 
-The `Database` in `LanguageX` is a key-value documents database stored as josn.
+The `Database` in `LanguageX` is a key-value documents database stored as json.
 There are TWO databased in `X`.
+
 The first one is the server based database and the second one is the client side database.
+
 And then there is a `shadow` database that can be used to store shared database key/values pairs.
-This `shadow` database is initialized on the server, populated with keys that the server wants to share with the client. On first client load; the `shadow` database is sent to the client as cookies. This is also a two-way data sharing mechanism; by making the server send extra shared keys with no value to the client, (like the server send the client a key called `userName` with no value), this allows the client to set the value by itself using a POST request to the server with the value for the key.
+
+This `shadow` database is initialized on the server, populated with keys that the server wants to share with the client.
+
+On first client load; the `shadow` database is sent to the client as cookies. This is also a two-way data sharing mechanism; by making the server send extra shared keys with no values to the client, (ex: the server send the client a key called `userName` with no value), this allows the client to set the value by itself using a POST request to the server with the value for the key.
+
 The server then has control whether to sync that change on the server.
+
 Once the server has decieded what to do with the received data in the post request, it sends the user a hash of the value it received. This hash is generated by using the user's public ssh key to digitally sign the data.
+
 All POST requests from the client to the server must include a `userId` in the body of the request.
+
 The value of `userId` is treated as the public ssh key of the user and is used to digitally sign data sent from the server to the client.
+
 Respectivly, all responses from POST request include the `serverId` key/value pair in the response body. This `serverId` is treated as the server's public ssh key.
+
 The user uses client side authentication methods to generate both a private and a public ssh key.
+
 The user's private ssh key is generated by any authentication method preferabbable as long as it generated both a private and a publick ssh key.
+
 Once the private key is generated on the client, it is turned into a hash using the server's publick ssh key `serverId` which can be found by making a GET request to `/handshake/id` which returns the key as raw text.
-After the client users `serverId` to turn their private ssh key into a hash, they delete the private key from the client and send the generated hash to the server.
+
+then the client uses the `serverId` to turn their private ssh key into a hash, they delete the private key from the client and send the generated hash to the server.
+
 The client then either asks the user for a `password` that will be used to encrypt the hash or use a JWT token or biometric authentication or single-sign-onn sso.
 
 ```x
@@ -159,12 +218,11 @@ func[3.5] postData($data: string[], $url: string) => <$response:Response> e // T
 
 # Conditionals and optional chaining
 
+You can use if statements in `X`:
 ```x
-// You can use if statements in `X`
-const data = postData(['a', 'b', 'c'], "/test")
-// the `use` operator automacilly returns the validated response body data against zod schemas, which means you get intellisense if you have setup your zod schemas.
-// the `use` operator also 'await' the data
-const validatedData = use $data
+var data = postData(['a', 'b', 'c'], "/test")
+var validatedData = use $data
+
 // you can now access properties on the validated data. however properties are stored as arrays and not obects!
 // for example:
 const someObject = {someProp: 'someValue'} // ! invalid
